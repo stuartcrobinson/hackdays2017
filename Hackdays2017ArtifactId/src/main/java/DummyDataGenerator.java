@@ -5,10 +5,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class DummyDataGenerator {
 
+    public static final String[] listOfGroupedProducts = {"charcoal briquettes", "lighter fluid", "hot dog buns", "hot dogs", "ketchup", "mustard", "pickles", "sausage", "t-bone steak", "veggie tray", "relish", "brown mustard", "spicy mustard", "potato chips", "corn chips", "salsa", "corn", "*", "wood screws", "wood glue", "wd40", "white bathroom caulk", "beige caulk", "small hammer", "nails", "sandpaper", "door stop", "*", "potato chips", "corn chips", "chocolate covered pretzels", "popcorn", "hummus", "guacamole", "brownies", "salsa", "*", "shovel", "fertilizer", "potting soil", "mulch", "ground cover", "terra cotta pots", "garden hose", "spinach seeds", "wildflower seeds", "pansies", "*", "princess leia doll", "han solo action figure", "star wars napkins", "star wars balloons", "luke skywalker pillow", "darth vader action figure", "rogue-1 toys", "*", "toilet paper", "paper towels", "dawn dish soap", "shrek napkins", "7th generation dish soap", "tide laundry detergent", "all laundry detergent", "*", "birthday candles", "shrek napkins", "streamers", "shrek balloons", "shrek paper plates", "cake", "*", "birthday candles", "star wars napkins", "star wars plates", "cake", "han solo action figure", "darth vader action figure"};
 
     public static final Instant initialInstant = Instant.now().minus(Duration.ofDays(7));
 
     public static Map<String, String> m_prodId_prodTitle;
+
+    public static final int orderPercentage = 30;
 //// Adding 5 hours and 4 minutes to an Instant
 //instant.plus(Duration.ofHours(5).plusMinutes(4));
 
@@ -39,7 +42,6 @@ public class DummyDataGenerator {
      */
     public static void main(String[] asdf) {
 
-        String[] listOfGroupedProducts = {"charcoal briquettes", "lighter fluid", "hot dog buns", "hot dogs", "ketchup", "mustard", "pickles", "relish", "brown mustard", "spicy mustard", "potato chips", "corn chips", "salsa", "corn", "*", "wood screws", "wood glue", "wd40", "white bathroom caulk", "beige caulk", "small hammer", "nails", "sandpaper", "door stop", "*", "potato chips", "corn chips", "popcorn", "brownies", "salsa", "*", "shovel", "fertilizer", "potting soil", "pansies", "*", "princess leia doll", "han solo action figure", "darth vader action figure", "rogue-1 toys", "*", "toilet paper", "paper towels", "dawn dish soap", "7th generation dish soap", "tide laundry detergent", "all laundry detergent", "*", "birthday candles", "shrek napkins", "shrek paper plates", "cake", "*", "birthday candles", "star wars napkins", "star wars plates", "cake", "han solo action figure", "darth vader action figure"};
         m_prodId_prodTitle = getMap_prodId_prodTitle(listOfGroupedProducts);
         List<List<String>> listOfProductSets = getListOfProductSets(listOfGroupedProducts);
 
@@ -99,7 +101,7 @@ public class DummyDataGenerator {
 
         String productTitle = getRandomProductFromList(productSet);
 
-        boolean isOrder = percent(10);
+        boolean isOrder = percent(orderPercentage);
 
         Instant eventInstant = initialInstant.plus(Duration.ofMinutes(ThreadLocalRandom.current().nextInt(1, 60 * 24 * 7)));
 
@@ -158,9 +160,15 @@ public class DummyDataGenerator {
         return randomNum == 1;
     }
 
+
+    public static Map<String, String> getMap_prodId_prodTitle() {
+        return getMap_prodId_prodTitle(listOfGroupedProducts);
+
+    }
+
     private static Map<String, String> getMap_prodId_prodTitle(String[] listOfGroupedProducts) {
 
-        Set<String> titles = new HashSet<>();
+        TreeSet<String> titles = new TreeSet<>();   //for fixed order
 
         for (String title : listOfGroupedProducts) {
             titles.add(title);
@@ -212,7 +220,7 @@ public class DummyDataGenerator {
         }
 
         public String toString() {
-            return customerId + ", " + eventType + ", " + productId + ", " +  m_prodId_prodTitle.get(productId) + ", " + timestamp.toString();
+            return customerId + ", " + eventType + ", " + productId + ", " + m_prodId_prodTitle.get(productId) + ", " + timestamp.toString();
         }
 
         @Override
