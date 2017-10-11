@@ -50,7 +50,7 @@ public class ElasticsearchLoader {
 
     public static void main(String[] args) {
         rebuildProductsIndex();
-    
+
     }
 
     public static void rebuildProductsIndex() {
