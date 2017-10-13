@@ -1,8 +1,8 @@
 <template>
   <div class="container0">
     <div>
-      <h1>{{ msg }}</h1>
-      <h2>Essential Links for  {{ $store.state.name }}  {{ $store.state.count }}</h2>
+      <!--<h1>{{ msg }}</h1>-->
+      <!--<h2>Essential Links for  {{ $store.state.name }}  {{ $store.state.count }}</h2>-->
       Counter: {{ $store.state.count }} times, count is {{ evenOrOdd }}.
       <br>
       Answer: {{ $store.state.isyes }}
@@ -10,54 +10,37 @@
       gifurl: {{ $store.state.gifurl }}
       <br>
       <img :src="$store.state.gifurl"/>
-      <!--{{ $store.state.gifurl }}-->
-      <ul>
-        <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-        <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-        <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-        <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-        <li><a href="https://www.google.com" target="_blank">Google</a></li>
 
-        <br>
-        <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank">Docs for This Template</a></li>
-      </ul>
-      <h2>Ecosystem</h2>
-      <ul>
-        <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-        <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-        <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-        <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-      </ul>
     </div>
     <div class="container">
       <div class="row text-center">
-        <h3>Clicked: {{ $store.state.count }} times, count is {{ evenOrOdd }}.</h3>
+        Clicked: {{ $store.state.count }} times, count is {{ evenOrOdd }}
         <button class="btn btn-success" @click="increment">+</button>
         <button class="btn btn-danger" @click="decrement">-</button>
         <button class="btn" @click="incrementIfOdd">Increment if odd</button>
         <button class="btn" @click="incrementAsync">Increment async</button>
         <button class="btn" @click="yesnoaction">yesnoaction</button>
-        <button class="btn" @click="myfunction">load products {{ namee }}</button>
+        <button class="btn" @click="queryProductsMethod">load products {{ namee }}</button>
         <br>
-        <!--<form id="demo">-->
-        <form @submit.prevent="myfunction">
-          <label for="nameId">Enter name:</label>
-          <input type="text" v-model="namee" id="nameId" lazy/>
-        </form>
+        <!--&lt;!&ndash;<form id="demo">&ndash;&gt;-->
+        <!--<form @submit.prevent="queryProductsMethod">-->
+          <!--<label for="nameId">Enter name:</label>-->
+          <!--<input type="text" v-model="namee" id="nameId" lazy/>-->
+        <!--</form>-->
 
         <p>{{ namee }} is {{ age }} years old.</p>
         <br>
+        <search-field/>
         is loading? {{ $store.state.isLoadingProductsSearch }}
         <!--<br>-->
         <!--products? {{ $store.state.queriedProducts }}-->
         <br>
         length? {{ $store.state.queriedProducts.length }}
-        <br>
-        <ol>
-          <li>one</li>
-          <li>two</li>
-          <li>three</li>
-        </ol>
+
+
+
+        <card-list :products="$store.state.queriedProducts"/>
+
         <ol id="example-1">
           <li v-for="item in $store.state.queriedProducts">
 
@@ -100,6 +83,8 @@
   import { mapGetters, mapActions } from 'vuex'
   import Example1 from './Example1.vue'
   import Card from './Card.vue'
+  import CardList from './CardList.vue'
+  import SearchField from './SearchField.vue'
 
   // https://github.com/vuejs/vuex/issues/367
   // this.$store.dispatch('updatecustomer', this.custumer)
@@ -107,7 +92,7 @@
   export default {
     name: 'hello',
     components: {
-      Example1, Card
+      Example1, Card, SearchField, CardList
     },
     computed: mapGetters([
       'evenOrOdd'
@@ -121,7 +106,7 @@
         'yesnoaction',
         'loadproducts'
       ]),
-      myfunction () {
+      queryProductsMethod () {
         this.$store.dispatch('loadproducts', this.namee)
       }
     },

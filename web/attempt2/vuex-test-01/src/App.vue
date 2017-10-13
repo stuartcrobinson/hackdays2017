@@ -11,13 +11,11 @@
     <router-link to="Example22">Example22 doesntwork</router-link>
     <router-link to="/">Home</router-link>
 
-    <img src="./assets/logo.png">
+    <!--<img src="./assets/logo.png">-->
 
     <router-view></router-view>
   </div>
 </template>
-
-<!--TODO - make cards display in rows-->
 
 <script>
   import Example1 from './components/Example1.vue'

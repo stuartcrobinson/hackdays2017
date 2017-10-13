@@ -1,12 +1,6 @@
 <template>
-  <div id="example1">
-    productId: {{ productId }}
-    <br>
-    productTitle: {{ productTitle }}
-    <br>
-    productDescription: {{ productDescription }}
-    <!--<br>-->
-    <!--imgurl: {{ imgUrl }}-->
+  <div>
+    <strong>{{ productTitle }}</strong>
     <br>
     <img :src="imgUrl"/>
   </div>

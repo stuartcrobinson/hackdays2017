@@ -25,7 +25,6 @@ var proxyTable = config.dev.proxyTable
 
 var app = express()
 
-
 // axios.get(`/api/elasticsearchget/products/_search?q=${query}`) // `http://robinson.brontolabs.local:9115/products/_search?q=${query}`
 
 // //stuart added
@@ -38,23 +37,47 @@ var app = express()
 //   next()
 // })
 
-
 //stuart added
 app.get('/api/queryproducts/:query', function (req, res, next) {
-  console.log("app.get('/api/queryproducts/:query', function (req, res, next) {.  query: " + req.params.query)
+  console.log('app.get(\'/api/queryproducts/:query\', function (req, res, next) {.  query: ' + req.params.query)
   axios.get(`http://robinson.brontolabs.local:9115/products/_search?q=${req.params.query}`)
     .then(response => {
-      console.log("response:")
+      console.log('response:')
       console.log(response)
-      console.log("response.data:")
+      console.log('response.data:')
       console.log(response.data)
       res.send(response.data)
     })
     .catch(error => res.send(error))
-  // Handle the get for this route
-  // res.send('hello')
-  // next()
 })
+
+app.get('/api/queryproducttitletypeaheads/:query', function (req, res, next) {
+
+  console.log('app.get(\'/api/queryproducttitletypeaheads/:query\', function (req, res, next) {.  query: ' + req.params.query)
+
+  axios.post(`http://robinson.brontolabs.local:9115/products/_search?pretty`, {
+    'suggest': {
+      'mysuggest': {
+        'prefix': req.params.query,
+        'completion': {
+          'field': 'titlesuggest'
+        }
+      }
+    }
+  }).then(response => {
+    //create list of product titles only
+    console.log('response:')
+    console.log(response)
+
+    const titles = response.data.suggest.mysuggest[0].options.map(el => el._source.titlesuggest)
+    console.log('titles:')
+    console.log(titles)
+    res.send(titles)
+  })
+    .catch(error => res.send(error))
+})
+
+//queryproducttitletypeaheads
 
 app.post('/', function (req, res, next) {
   // Handle the post for this route
