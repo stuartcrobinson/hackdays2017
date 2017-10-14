@@ -1,8 +1,6 @@
 <template>
   <div class="container0">
     <div>
-      <!--<h1>{{ msg }}</h1>-->
-      <!--<h2>Essential Links for  {{ $store.state.name }}  {{ $store.state.count }}</h2>-->
       Counter: {{ $store.state.count }} times, count is {{ evenOrOdd }}.
       <br>
       Answer: {{ $store.state.isyes }}
@@ -20,13 +18,7 @@
         <button class="btn" @click="incrementIfOdd">Increment if odd</button>
         <button class="btn" @click="incrementAsync">Increment async</button>
         <button class="btn" @click="yesnoaction">yesnoaction</button>
-        <button class="btn" @click="queryProductsMethod">load products {{ namee }}</button>
         <br>
-        <!--&lt;!&ndash;<form id="demo">&ndash;&gt;-->
-        <!--<form @submit.prevent="queryProductsMethod">-->
-          <!--<label for="nameId">Enter name:</label>-->
-          <!--<input type="text" v-model="namee" id="nameId" lazy/>-->
-        <!--</form>-->
 
         <p>{{ namee }} is {{ age }} years old.</p>
         <br>
@@ -36,8 +28,6 @@
         <!--products? {{ $store.state.queriedProducts }}-->
         <br>
         length? {{ $store.state.queriedProducts.length }}
-
-
 
         <card-list :products="$store.state.queriedProducts"/>
 
@@ -85,6 +75,7 @@
   import Card from './Card.vue'
   import CardList from './CardList.vue'
   import SearchField from './SearchField.vue'
+  import ItemTemplate from './ItemTemplate.vue'
 
   // https://github.com/vuejs/vuex/issues/367
   // this.$store.dispatch('updatecustomer', this.custumer)
@@ -92,7 +83,7 @@
   export default {
     name: 'hello',
     components: {
-      Example1, Card, SearchField, CardList
+      Example1, Card, SearchField, CardList, ItemTemplate
     },
     computed: mapGetters([
       'evenOrOdd'
@@ -105,38 +96,18 @@
         'incrementAsync',
         'yesnoaction',
         'loadproducts'
-      ]),
-      queryProductsMethod () {
-        this.$store.dispatch('loadproducts', this.namee)
-      }
+      ])
     },
     data () {
       return {
         msg: 'Welcome to Your Vue.js App',
         namee: 'Ashley',
-        age: 100
+        age: 100,
+        item: 'firstitem?',
+        items: [],
+        template: ItemTemplate
       }
     }
   }
 </script>
 
-<!--&lt;!&ndash; Add "scoped" attribute to limit CSS to this component only &ndash;&gt;-->
-<!--<style scoped>-->
-<!--h1, h2 {-->
-<!--font-weight: normal;-->
-<!--}-->
-
-<!--/*ul {*/-->
-<!--/*list-style-type: none;*/-->
-<!--/*padding: 0;*/-->
-<!--/*}*/-->
-
-<!--/*li {*/-->
-<!--/*display: inline-block;*/-->
-<!--/*margin: 0 10px;*/-->
-<!--/*}*/-->
-
-<!--a {-->
-<!--color: #42b983;-->
-<!--}-->
-<!--</style>-->

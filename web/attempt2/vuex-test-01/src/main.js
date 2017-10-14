@@ -5,6 +5,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Example1 from './components/Example1.vue'
+// You need a specific loader for CSS files like https://github.com/webpack/css-loader
 
 import store from './store/store'
 

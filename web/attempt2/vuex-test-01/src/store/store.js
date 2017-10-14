@@ -77,13 +77,10 @@ const actions = {
     })
   },
   loadproducts (context, query) {
-    // context.commit('setanything', 'isLoadingProductsSearch', true)
     context.commit('setisLoadingProductsSearch', true)
 
     return new Promise((resolve, reject) => {
       axios.get(`/api/queryproducts/${query}`) // `http://robinson.brontolabs.local:9115/products/_search?q=${query}`
-
-      // axios.get(`/api/elasticsearchget/products/_search?q=${query}`) // `http://robinson.brontolabs.local:9115/products/_search?q=${query}`
         .then(function (res) {
           context.commit('setisLoadingProductsSearch', false)
           console.log('res:')
@@ -97,23 +94,6 @@ const actions = {
         })
     })
   }
-
-  //   axios.post(Config.baseURL + '/api/customer/' + customer.id + '/update', customer)
-  //     .then((response) => {
-  //       context.commit('UPDATE_CUSTOMER', customer)
-  //       resolve()
-  //     }).catch((response) => {
-  //     reject()
-  //   })
-  // })
-
-// ,
-// updatecustomer2 (context, customer) {
-//   return axios.post(Config.baseURL + '/api/customer/' + customer.id + '/update', customer)
-//     .then((response) => {
-//       context.commit('UPDATE_CUSTOMER', customer)
-//     })
-// }
 }
 
 export default new Vuex.Store({
@@ -122,3 +102,20 @@ export default new Vuex.Store({
   mutations,
   actions
 })
+
+//   axios.post(Config.baseURL + '/api/customer/' + customer.id + '/update', customer)
+//     .then((response) => {
+//       context.commit('UPDATE_CUSTOMER', customer)
+//       resolve()
+//     }).catch((response) => {
+//     reject()
+//   })
+// })
+//
+// ,
+// updatecustomer2 (context, customer) {
+//   return axios.post(Config.baseURL + '/api/customer/' + customer.id + '/update', customer)
+//     .then((response) => {
+//       context.commit('UPDATE_CUSTOMER', customer)
+//     })
+// }
