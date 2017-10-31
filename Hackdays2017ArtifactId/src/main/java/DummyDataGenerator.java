@@ -1,3 +1,9 @@
+
+
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -48,14 +54,25 @@ public class DummyDataGenerator {
 
         Set<List<BrowseOrOrderEvent>> browseOrderData = generateCustomerBrowseOrderData(m_prodId_prodTitle, listOfProductSets);
 
+        File f = new File("tempDummyData.csv");
+
         System.out.println(BrowseOrOrderEvent.getHeader());
+
+        StringBuilder sb = new StringBuilder();
 
         for (List<BrowseOrOrderEvent> list : browseOrderData) {
             for (BrowseOrOrderEvent event : list) {
                 System.out.println(event);
+                sb.append(event.toString() + System.lineSeparator());
+
             }
         }
 
+        try {
+            Files.write(f.toPath(), sb.toString().getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -220,7 +237,7 @@ public class DummyDataGenerator {
         }
 
         public String toString() {
-            return customerId + ", " + eventType + ", " + productId + ", " + m_prodId_prodTitle.get(productId) + ", " + timestamp.toString();
+            return customerId + "," + eventType + "," + productId + "," + m_prodId_prodTitle.get(productId) + "," + timestamp.toString();
         }
 
         @Override

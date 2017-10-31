@@ -1,0 +1,50 @@
+NEED FILES:
+
+
+
+for a user whose data spans over large time period (weeks, months years), use all data as one user but ALSO separate data as though
+it comprises several users.  one user per smaller time period (like over a few hours to simulate specific preferences).  do for both lightfm and LSTM
+
+
+
+MASTER INPUT FILES - create from bronto data -
+
+- master browse file
+
+userID, itemID, url, timestamp
+
+- master orders file
+
+userID, itemID, timestamp
+
+- master item features file:
+
+itemID, title, url, description
+
+
+--- timeCode?
+
+timeCode is an integer.... this is so stupid.  just get whole time stamp.  talk to tom asap.  yass talked to tom he says i can keep timestamps :))))
+
+-----
+
+
+A.  FOR LIGHTFM - time-blind
+
+use browse and orders data.  weight orders higher.  or use higher score/ranking for orders?
+
+1.  user/item interactions:
+
+userID, itemID, weight or score
+
+2.  item features
+
+itemID, features (list of strings)
+
+
+
+B.  FOR SEQUENCE NEXT PRODUCT PREDICTION
+
+use browse data only
+
+1.  training sequence (a specific sequence of browsed products.  some representing user's entire browses.  some, a user browses over shorter time frame.

@@ -19,36 +19,15 @@
         <button class="btn" @click="incrementAsync">Increment async</button>
         <button class="btn" @click="yesnoaction">yesnoaction</button>
         <br>
-
-        <p>{{ namee }} is {{ age }} years old.</p>
-        <br>
-        <search-field/>
+        <search-field-container/>
         is loading? {{ $store.state.isLoadingProductsSearch }}
-        <!--<br>-->
-        <!--products? {{ $store.state.queriedProducts }}-->
         <br>
         length? {{ $store.state.queriedProducts.length }}
 
         <card-list :products="$store.state.queriedProducts"/>
 
-        <ol id="example-1">
-          <li v-for="item in $store.state.queriedProducts">
-
-            <!--<card :productTitle="item._source.title"></card>-->
-
-            <!--<br>-->
-            <!--{{item}}-->
-            <!--<br>-->
-            <card :imgUrl="item._source.imageUrl"
-                  :productTitle="item._source.title"
-                  :productDescription="item._source.description"
-                  :productId="item._source.productId"></card>
-            <!--{{ item }}-->
-          </li>
-        </ol>
       </div>
     </div>
-    <example1 nickname="bob">hi</example1>
   </div>
 </template>
 
@@ -74,7 +53,7 @@
   import Example1 from './Example1.vue'
   import Card from './Card.vue'
   import CardList from './CardList.vue'
-  import SearchField from './SearchField.vue'
+  import SearchFieldContainer from './SearchFieldContainer.vue'
   import ItemTemplate from './ItemTemplate.vue'
 
   // https://github.com/vuejs/vuex/issues/367
@@ -83,7 +62,7 @@
   export default {
     name: 'hello',
     components: {
-      Example1, Card, SearchField, CardList, ItemTemplate
+      Example1, Card, SearchFieldContainer, CardList, ItemTemplate
     },
     computed: mapGetters([
       'evenOrOdd'
@@ -101,7 +80,6 @@
     data () {
       return {
         msg: 'Welcome to Your Vue.js App',
-        namee: 'Ashley',
         age: 100,
         item: 'firstitem?',
         items: [],

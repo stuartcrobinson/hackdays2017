@@ -8,10 +8,10 @@
         :id="input_id"
         :list="datalist_id"
         :autocomplete="autocomplete"
-        v-on:input="inputinputevent"
         :placeholder="placeholder"
         :disabled="disabled"
         :autofocus="autofocus"
+        @input="inputinputevent"
       />
       <datalist :id="datalist_id">
         <option v-for="item in typeaheads">{{ item }}</option>
@@ -73,7 +73,7 @@
         type: Boolean,
         default: false
       },
-      disabled: {           //TODO test these input parameters.  add: multiple? pattern? readonly?
+      disabled: {           // TODO test these input parameters.  add: multiple? pattern? readonly?
         type: Boolean,
         default: false
       }

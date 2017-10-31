@@ -29,7 +29,7 @@ public class BingImageUrlFetcher {
 
             for (String productId : m_prodId_prodTitle.keySet()) {
                 String productTitle = m_prodId_prodTitle.get(productId);
-                String productDescription = "The best " + productTitle + " money can buy!";
+//                String productDescription = "The best " + productTitle + " money can buy!";
                 String imageUrl = getBingImageUrl(driver, "\"" + productId + "\" " + productTitle);
                 m_prodId_imageUrl.put(productId, imageUrl);
 
