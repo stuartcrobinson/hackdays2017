@@ -1,13 +1,15 @@
 <template>
   <div :class="component_class">
-    <form @submit.prevent="onsubmit">
+    <form :name="inputvmodel"
+          @submit.prevent="mysubmit"> <!--@submit.prevent="onsubmit">-->
       <label :for="input_id">{{ label }}</label>
       <input
         type="text"
+        :name="inputvmodel"
         v-model="inputvmodel"
         :id="input_id"
         :list="datalist_id"
-        :autocomplete="autocomplete"
+        autocomplete="off"
         :placeholder="placeholder"
         :disabled="disabled"
         :autofocus="autofocus"
@@ -37,7 +39,7 @@
       },
       wait: {
         type: Number,
-        default: 100
+        default: 200
       },
       get_typeahead_endpoint_full: Function,
       typeahead_endpoint_partial: String,
@@ -81,6 +83,7 @@
 
     methods: {
       inputinputevent () {
+        console.log('inputinputevent this.inputvmodel: ' + this.inputvmodel)
         const prevInputValue = this.valuehistory[1]
         const currInputValue = this.inputvmodel
 
@@ -91,32 +94,39 @@
           this.currentInputValueWasSelectedFromDropdown = false
         }
       },
-      getTypeaheads: _.debounce(
-        function () {
-          if (this.inputvmodel.length === 0) {
-            this.typeaheads = []
-          } else {
-            if (this.inputvmodel.length >= this.min_length) {
-              var vm = this
+      mysubmit () {
+        this.onsubmit(this.inputvmodel)
+        this.typeaheads = []
+      },
+      getTypeaheads: _.debounce(function () {
+        console.log('in getTypeaheads, wait: ' + this.wait)
+        if (this.inputvmodel.length === 0) {
+          this.typeaheads = []
+        } else {
+          if (this.inputvmodel.length >= this.min_length) {
+            var vm = this
 
-              const typeaheadEndpoint = this.typeahead_endpoint_partial.length > 0 ? this.typeahead_endpoint_partial + this.inputvmodel : this.get_typeahead_endpoint(this.inputvmodel)
+            const typeaheadEndpoint = this.typeahead_endpoint_partial.length > 0 ? this.typeahead_endpoint_partial + this.inputvmodel : this.get_typeahead_endpoint(this.inputvmodel)
 
-              axios.get(typeaheadEndpoint)
-                .then(function (response) {
-                  vm.typeaheads = response.data
-                  document.getElementById(vm.datalist_id).focus()
-                })
-                .catch(function (error) {
-                  console.log(error)
-                })
-            }
+            console.log('endpoint: ' + typeaheadEndpoint)
+            console.log('this.wait: ' + this.wait)
+
+            axios.get(typeaheadEndpoint)
+              .then(function (response) {
+                vm.typeaheads = response.data
+                console.log('set typeaheads: ' + vm.typeaheads)
+                document.getElementById(vm.datalist_id).focus()
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
           }
-        },
-        this.wait // milliseconds to wait for the user to stop typing. https://lodash.com/docs#debounce
-      )
+        }
+      }, 150)  // WTF THIS DOESNT WORK IF USE this.wait INSTEAD OF HARDCODED NUMBER HERE REEEEEEEEEEEEE// milliseconds to wait for the user to stop typing. https://lodash.com/docs#debounce
     },
     watch: {
       inputvmodel: function () {
+        console.log('in inputvmodel')
         if (!this.currentInputValueWasSelectedFromDropdown) {
           this.getTypeaheads()
         }

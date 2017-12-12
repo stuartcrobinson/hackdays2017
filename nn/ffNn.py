@@ -1,3 +1,9 @@
+# 
+# #don't use gpu
+# import os
+# os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
+# os.environ["CUDA_VISIBLE_DEVICES"] = ""
+
 from __future__ import print_function
 from nltk.stem import PorterStemmer, WordNetLemmatizer
 from scipy import sparse
@@ -31,47 +37,39 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.pipeline import Pipeline
 from keras.callbacks import ModelCheckpoint
 
-if not os.path.exists('~/ml/dataMedium'): #for app.py - web
-    os.makedirs('~/ml/dataMedium')        #need blank next line for pasting
+root = os.path.expanduser('~/ml/')
 
-siteId = "35569"
-# siteId = "38178"
+if not os.path.exists(root + 'dataMedium'): #for app.py - web
+    os.makedirs(root + 'dataMedium')        #need blank next line for pasting
+
+if not os.path.exists(root + 'model_dir'): #for app.py - web
+    os.makedirs(root + 'model_dir')        #need blank next line for pasting
+
+#/home/ec2-user/ml/model_dir/ffWtfWeightsUsing1s_v2_NoDrpOut_1HdnLyr_DoubleLen1stLyr_1800sPauseChops_ip-172-31-25-45_35569_epoch1.h5
+
+# siteId = "35569"
+siteId = "38178"
 # 
-np = numpy
+map_productId_parentProductId = numpy.load(root + 'dataMedium/map_productId_parentProductId_'+siteId+'.npy').item()
 
 def printProductIds(list):
     # http://127.0.0.1:5000/browses?productIds=OP-MKT10-PORIII-ET
     print("http://127.0.0.1:5000/browses?productIds=" + str(list).replace("'", "").replace(" ", "").replace("[","").replace("]",""))
     print()
 
-def getRec(productIdsNew):
-    Xnew = numpy.zeros(shape=(1, len(allProducts)))
-    for productId in productIdsNew:
-        productIndex = map_productId_index[productId]
-        Xnew[0][productIndex] = 1
-    prediction = model.predict(Xnew, verbose=0)[0]
-    for productId in productIdsNew:
-        productIndex = map_productId_index[productId]
-        prediction[productIndex] = 0
-    next_productIndex = np.argmax(prediction)
-    next_productId = map_index_productId[next_productIndex]
-    return next_productId
 
-def getRecs(productIds, n):
-    for i in range(0, n):
-        productIds.append(getRec(productIds))
-    return productIds
+#dataGenCustomNNshort is for trying to get the NN to work at all.  original model w/ all products and all users and all item features didn't work. paring it down
 
+hybrid = False
+titlesOnly = True
+minimumTagCount = 0
+usingParents = False
 
-'''
-dataGenCustomNNshort is for trying to get the NN to work at all.  original model w/ all products and all users and all item features didn't work. paring it down
-'''
-
-#### TODO
-#
 
 #####################################################################################################################
 # 1.  get item features.  build tagIndex->tag map
+# 
+# 
 # 
 # stemmer = PorterStemmer()
 # 
@@ -87,8 +85,7 @@ dataGenCustomNNshort is for trying to get the NN to work at all.  original model
 #     return tokens
 # 
 # map_productId_descriptionTokens = {}
-# map_productId_title = {}
-# path = "fordocker/products_production_siteId_=" + siteId + "/*.csv"
+# path = root + "fordocker/products_production_siteId_=" + siteId + "/*.csv"
 # nonascii = bytearray(range(0x80, 0x100))
 # for fname in glob.glob(path):
 #     print(fname)
@@ -97,42 +94,70 @@ dataGenCustomNNshort is for trying to get the NN to work at all.  original model
 #         for line in infile: # b'\n'-separated lines (Linux, OSX, Windows)
 #             line = line.translate(None, nonascii)
 #             line = str(line,'utf-8')
-#             for row in csv.reader([line]):
-#                 k,v  = row[0], get_words(row[2]) + get_words(row[3])[:13] 
+#             for row in csv.reader([line], doublequote=True, quoting=csv.QUOTE_ALL, escapechar='\\'):
+#                 productId = row[0]
+#                 title = row[2]
+#                 description = row[3] if siteId == "35569" else ""
+#                 k,v  = productId, get_words(title) + get_words(description)[:13] 
 #                 map_productId_descriptionTokens[k] = v
-#                 map_productId_title[k] = row[2]
-# shared = {}
-# allTagsSet = {}
-# # get starter description
+# 
+# map_productId_descriptionTokens_original = copy.deepcopy(map_productId_descriptionTokens)
+# 
+# # now remove all tags that only exist once in the collection
+# allTagsList = []
 # for key in map_productId_descriptionTokens:
-#     shared = set(map_productId_descriptionTokens[key])
-#     allTagsSet = set(map_productId_descriptionTokens[key])
-#     break
+#     allTagsList.extend(map_productId_descriptionTokens[key])
+# 
+# map_tag_count = Counter(allTagsList)
+# 
+# minimumTagCount = 5
+# 
+# minimalUseTags = [tag for (tag, count) in map_tag_count.items() if count < minimumTagCount]
 # 
 # for key in map_productId_descriptionTokens:
-#     shared = shared.intersection(map_productId_descriptionTokens[key])
-#     allTagsSet = allTagsSet.union(map_productId_descriptionTokens[key])
+#     tokens = map_productId_descriptionTokens[key]
+#     shrunkTokens = [tag for tag in tokens if tag not in minimalUseTags]
+#     map_productId_descriptionTokens[key] = shrunkTokens
 # 
-# #done making item features!!!!!!   what next?  collect all tags into a single list/vector.  now, made maps!  seeeeee
+# # now rebuild tag stuff w/ shortened tags lists (after removing singles)
 # 
-# allTagsSet = list(allTagsSet)
+# ##------------------------------------------------------------------------------------------------------------copy stop here on local
 # 
-# map_index_tag = dict(enumerate(allTagsSet))
-# map_tag_index = {x:i for i,x in enumerate(allTagsSet)}
+# def getUniqueTags(map_productId_descriptionTokens):
+#     shared = {}
+#     allTagsSet = {}
+#     # get starter description
+#     for key in map_productId_descriptionTokens:
+#         shared = set(map_productId_descriptionTokens[key])
+#         allTagsSet = set(map_productId_descriptionTokens[key])
+#         break
+#     for key in map_productId_descriptionTokens:
+#         shared = shared.intersection(map_productId_descriptionTokens[key])
+#         allTagsSet = allTagsSet.union(map_productId_descriptionTokens[key])
+#     return list(allTagsSet)
 # 
-
-#####################################################################################################################
-#####################################################################################################################
+# uniqueTagsList = getUniqueTags(map_productId_descriptionTokens)
+# 
+# 
+# map_index_tag = dict(enumerate(uniqueTagsList))
+# map_tag_index = {x:i for i,x in enumerate(uniqueTagsList)}
+# 
+# 
+# 
+#### end item features getting -- now need to incorporate features in the neural network.  need a node per token/tag
+######################################################################################################################################################################
+######################################################################################################################################################################
 # 2. get browse lists
 
 map_customerId_productIdDateTuplesList_original = defaultdict(list)
 
-try:
-    map_customerId_productIdDateTuplesList_original = numpy.load('~/ml/dataMedium/map_customerId_productIdDateTuplesList_original_'+siteId+'.npy').item()
-    print("read map_customerId_productIdDateTuplesList_original from file")
-except IOError:
-    # path = "~/ml/fordocker/browse_production_siteId_=35569/part-r-00016-55b1cd2d-d2c7-43dc-ac2a-da953f82d47b.csv"
-    path = "~/ml/fordocker/browse_production_siteId_="+siteId+"/*.csv"
+# try:
+#     map_customerId_productIdDateTuplesList_original = numpy.load(root + 'dataMedium/map_customerId_productIdDateTuplesList_original_'+siteId+'.npy').item()
+#     print("read map_customerId_productIdDateTuplesList_original from file")
+# except IOError:
+if True:
+    # path = os.path.expanduser("~/ml/fordocker/browse_production_siteId_=35569/part-r-00016-55b1cd2d-d2c7-43dc-ac2a-da953f82d47b.csv")
+    path = os.path.expanduser(root + "fordocker/browse_production_siteId_="+siteId+"/*.csv")
     nonascii = bytearray(range(0x80, 0x100))
     for fname in glob.glob(path):
         print(fname)
@@ -144,12 +169,14 @@ except IOError:
                 for row in csv.reader([line]):
                     customer_id = row[0]
                     product_id = row[2]
+                    if usingParents and product_id in map_productId_parentProductId:
+                        product_id = map_productId_parentProductId[product_id]
                     browse_timestamp = row[3]
                     format_date = datetime.datetime.strptime(browse_timestamp, '%Y-%m-%dT%H:%M:%S.%f%z')
                     map_customerId_productIdDateTuplesList_original[customer_id].append((product_id, format_date))
     map_customerId_productIdDateTuplesList_original = dict((id, list) for id,list in map_customerId_productIdDateTuplesList_original.items() if len(list) > 1)
     print("saving map_customerId_productIdDateTuplesList_original to file")
-    numpy.save('~/ml/dataMedium/map_customerId_productIdDateTuplesList_original_'+siteId+'.npy', map_customerId_productIdDateTuplesList_original)
+    numpy.save(root + 'dataMedium/map_customerId_productIdDateTuplesList_original_'+siteId+'.npy', map_customerId_productIdDateTuplesList_original)
 
 print("coping map_customerId_productIdDateTuplesList from original")
 map_customerId_productIdDateTuplesList = copy.deepcopy(map_customerId_productIdDateTuplesList_original)
@@ -195,6 +222,8 @@ if len(missingProductIds) > 0:
                     continue
     allProducts = set([tuple[0] for sublist in map_newCustomerId_productIdDateTuplesList.values() for tuple in sublist])   #was list of set        
 
+#------------------------------------------------------------------------------------------------------------------------------------------------------
+
 allUsers = set(map_newCustomerId_productIdDateTuplesList.keys()) #was list of set        
 
 map_customerId_productIdDateTuplesList = map_newCustomerId_productIdDateTuplesList
@@ -213,17 +242,22 @@ for i, userId in enumerate(allUsers):
     map_userId_index[userId] = i
     map_index_userId[i] = userId
 
-map_productId_index = {}
-map_index_productId = {}
+# stupid to not use comprehension, but mandatory cos doens't break console copy/paste.  ???
+# map_productId_index = {}
+# map_index_productId = {}
+# 
+# for i, productId in enumerate(allProducts):
+#     map_productId_index[productId] = i
+#     map_index_productId[i] = productId
 
-for i, productId in enumerate(allProducts):
-    map_productId_index[productId] = i
-    map_index_productId[i] = productId
+# this stuff is cool but it breaks copy/paste into terminal :(
+map_productId_index = dict((id, i) for (i, id) in enumerate(allProducts))
+map_index_productId = dict((i, id) for (i, id) in enumerate(allProducts))
 
 
 map_userID_map_productIndex_count = {}
 for userIndex, userId in enumerate(allUsers):
-    productsList =  [tuple[0] for tuple in map_customerId_productIdDateTuplesList[userId]]
+    productsList = [tuple[0] for tuple in map_customerId_productIdDateTuplesList[userId]]
     if len(productsList) < 2:
         continue
     map_productIndex_count = Counter([map_productId_index[id] for id in productsList])
@@ -231,20 +265,10 @@ for userIndex, userId in enumerate(allUsers):
 
 
 # print("writing map_productId_index and map_customerId_productIdDateTuplesList")
-numpy.save('~/ml/dataMedium/map_productId_index_'+siteId+'.npy', map_productId_index)
-numpy.save('~/ml/dataMedium/map_customerId_productIdDateTuplesList_'+siteId+'.npy', map_customerId_productIdDateTuplesList)
+numpy.save(root + 'dataMedium/map_productId_index_usingParents_'+str(usingParents)+'_'+siteId+'.npy', map_productId_index)
+numpy.save(root + 'dataMedium/map_customerId_productIdDateTuplesList_usingParents_'+str(usingParents)+'_'+siteId+'.npy', map_customerId_productIdDateTuplesList)
 
-# #uncomment if using descriptions
-#
-# map_productIndex_descriptionTokens = {}
-# 
-# for productId in map_productId_descriptionTokens:
-#     try:
-#         productIndex = map_productId_index[productId]
-#         print(productId, productIndex)
-#         map_productIndex_descriptionTokens[productIndex] = map_productId_descriptionTokens[productId]
-#     except:
-#         pass
+
 #####################################################################################################################
 #####################################################################################################################
 # 3.  create matrices
@@ -254,22 +278,55 @@ numpy.save('~/ml/dataMedium/map_customerId_productIdDateTuplesList_'+siteId+'.np
 #     that the lists in map_customerId_productIdList contain repeated products!!!!!!!!!
 #xRows should be the total number of unique item browses per user.  so if bob looked at 2 cats and a dog, and matt looked at a cat, dog, and 3 fish, xRows = 5
 
+numProductInteractionTrainingSamples = (sum(len(map_productIndex_count) for map_productIndex_count in map_userID_map_productIndex_count.values()))
 
-XNumRows = (sum(len(map_productIndex_count) for map_productIndex_count in map_userID_map_productIndex_count.values()))
+# browsedProductsWithFeatures = set(allProducts).intersection(map_productId_descriptionTokens.keys())
+# numBrowsedProductsWithFeatures = len(browsedProductsWithFeatures)
 
-X = numpy.zeros(shape=(XNumRows, len(allProducts)), dtype=bool)    #YESSSS MAKING THIS BOOL TYPE REALLY HELPED!  it's fniding the CUDA device now
-y = numpy.zeros(shape=(XNumRows, len(allProducts)), dtype=bool)
+if hybrid:
+    XNumRows = numProductInteractionTrainingSamples + numBrowsedProductsWithFeatures
+else:
+    XNumRows = numProductInteractionTrainingSamples
+
+numInputNodes = len(allProducts) + len(map_tag_index) if hybrid else len(allProducts) 
+numOutputNodes = len(allProducts)
+
+X = numpy.zeros(shape=(XNumRows, numInputNodes), dtype=bool)    #YESSSS MAKING THIS BOOL TYPE REALLY HELPED!  it's fniding the CUDA device now
+y = numpy.zeros(shape=(XNumRows, numOutputNodes), dtype=bool)
 
 rowIndex = -1
 
 for map_productIndex_count in map_userID_map_productIndex_count.values():
-    yRow = numpy.zeros(len(allProducts))
+    yRow = numpy.zeros(numOutputNodes)
     for productIndex, count in map_productIndex_count.items():
         yRow[productIndex] = 1 #count
     for productIndex, count in map_productIndex_count.items():
         rowIndex += 1
         X[rowIndex][productIndex] = 1 #count
         y[rowIndex] = yRow[:]
+        if hybrid:
+            productId = map_index_productId[productIndex] 
+            if not productId in map_productId_descriptionTokens:
+                continue
+            descriptionTags = map_productId_descriptionTokens[productId]
+            for tag in descriptionTags:
+                tagIndex = map_tag_index[tag]
+                nodeIndex = len(allProducts) + tagIndex
+                X[rowIndex][nodeIndex] = 1 #count
+
+#now add a training sample per product with only description features mapping to the product
+if hybrid:
+    for productId in browsedProductsWithFeatures:
+        rowIndex += 1
+        descriptionTags = map_productId_descriptionTokens[productId]
+        for tag in descriptionTags:
+            tagIndex = map_tag_index[tag]
+            nodeIndex = len(allProducts) + tagIndex
+            X[rowIndex][nodeIndex] = 1 #count
+
+        
+
+
 
 seed = 7                  # fix random seed for reproducibility
 numpy.random.seed(seed)
@@ -294,7 +351,7 @@ import socket
 def baseline_model():
     model = Sequential()
 #     model.add(Dropout(0.5, input_shape=(len(map_productId_index),)))
-    model.add(Dense(2*len(map_productId_index), input_dim=len(map_productId_index), activation='relu'))
+    model.add(Dense(2*numInputNodes, input_dim=numInputNodes, activation='relu'))
 #     model.add(Dropout(0.5))
     model.add(Dense(len(map_productId_index), activation='softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
@@ -313,36 +370,70 @@ totalIterations = 0
 
 
 
-# model.load_weights('ffWtfWeightsUsing1s_NoDrpOut_1HdnLyr_DoubleLen1stLyr_1800sPauseChops_USDR00253_35569_epoch2')
+# model.load_weights(root + 'ffWtfWeightsUsing1s_NoDrpOut_1HdnLyr_DoubleLen1stLyr_1800sPauseChops_USDR00253_35569_epoch2 allProducts
+np = numpy
+
+def getRec(productIdsNew):
+    Xnew = numpy.zeros(shape=(1, numInputNodes))
+    for productId in productIdsNew:
+        productIndex = map_productId_index[productId]
+        Xnew[0][productIndex] = 1
+        if hybrid:
+            if productId in map_productId_descriptionTokens:
+                descriptionTags = map_productId_descriptionTokens[productId]
+                for tag in descriptionTags:
+                    tagIndex = map_tag_index[tag]
+                    nodeIndex = len(allProducts) + tagIndex
+                    Xnew[0][nodeIndex] = 1 #count        
+    prediction = model.predict(Xnew, verbose=0)[0]
+    for productId in productIdsNew:
+        productIndex = map_productId_index[productId]
+        prediction[productIndex] = 0
+    next_productIndex = np.argmax(prediction)
+    next_productId = map_index_productId[next_productIndex]
+    return next_productId
+
+def getRecs(productIdsInput, n):
+    productIdsInput = [map_productId_parentProductId[x] if x in map_productId_parentProductId else x for x in productIdsInput]
+    productIds = productIdsInput[:]
+    for i in range(0, n):
+        productIds.append(getRec(productIds))
+    return productIds
 
 
-for iteration in range(1, 3):
+# model = load_model(root + 'model_dir/ffWtfWeightsUsing1s_v2_hybridTrue_minTagCutoff5_NoDrpOut_1HdnLyr_DoubleLen1stLyr_1800sPauseChops_ip-172-31-25-45_38178_epoch3.h5')
+# printProductIds(getRecs(['ZM100334'], 30))
+
+
+
+for iteration in range(1, 5):
     totalIterations += 1
     print("iteration: " + str(totalIterations))
     model.fit(X, y, epochs=1, batch_size=2000 ) #validation_data=(X_test,y_test)#fit shuffles by default according to https://stackoverflow.com/questions/42709051/what-does-the-acc-means-in-the-keras-model-fit-output-the-accuracy-of-the-final#comment72552203_42709115
-#     model.save_weights('ffWeightsUsing1sloss21.308_dropout0.2_1hidLayer_'+siteId, overwrite=True)
-    name = 'ffWtfWeightsUsing1s_NoDrpOut_1HdnLyr_DoubleLen1stLyr_'+str(secondsPause)+"sPauseChops_" + str(socket.gethostname()) + "_" + siteId + "_epoch" + str(iteration)
+    name = 'ffWtfWeightsUsing1s_v2_hybrid'+str(hybrid)+'_minTagCutoff'+str(minimumTagCount)+'_usingParents_'+str(usingParents)+'_NoDrpOut_1HdnLyr_DoubleLen1stLyr_'+str(secondsPause)+"sPauseChops_" + str(socket.gethostname()) + "_" + siteId + "_epoch" + str(totalIterations)
+    model.save_weights(name, overwrite=True)
 #     model.save_weights(name, overwrite=True)
-    model.save(name + '.h5')  # creates a HDF5 file 'my_model.h5'    https://keras.io/getting-started/faq/#how-can-i-save-a-keras-model
-
+#     model.save(root + 'model_dir/'+ name + '.h5')  # creates a HDF5 file 'my_model.h5'    https://keras.io/getting-started/faq/#how-can-i-save-a-keras-model
+    
     if siteId=='35569':
         printProductIds(getRecs(['OP-MKT10-PORIII-ET-K','OP-MKT12-PORIII-K','OP-MKT6510AT-HBG'], 30))
 #         printProductIds(getRecs(['OP-MKT10-PORIII-ET-K','OP-MKT12-PORIII-K','OP-MKT6510AT-HBG'], 30))
 #         printProductIds(getRecs(['OP-MKT10-PORIII-ET-K','OP-MKT12-PORIII-K','OP-MKT6510AT-HBG'], 30))
     if siteId=='38178':
-        printProductIds(getRecs(['ZM100334'], 30))
+        printProductIds(getRecs(['ZM100334'], 30)) #110374
+        printProductIds(getRecs(['110374'], 30)) #110374
 #         printProductIds(getRecs(['ZM100334'], 30))
 #         printProductIds(getRecs(['ZM100334'], 30))
     print('writing')
 
 
 
-
+# ffWtfWeightsUsing1s_hybrid_NoDrpOut_1HdnLyr_DoubleLen1stLyr_1800sPauseChops_ip-172-31-25-45_35569_epoch2.h5
 
 # nohup python3 nn.py > logNn.log 2>&1 &
 
 # model.fit(X2, y2, epochs=200, batch_size=10, callbacks=callbacks_list)  #starting at 4.44 - looking better after logout, reboot
-model.fit(X2, y2, epochs=10, batch_size=10000)
+# model.fit(X2, y2, epochs=10, batch_size=10000)
 
 #####################################################################################################################################
 #####################################################################################################################################
@@ -351,7 +442,10 @@ model.fit(X2, y2, epochs=10, batch_size=10000)
 #
 
 printProductIds(getRecs(['ZM100334'], 10))
+from keras.models import load_model
 
+
+model = load_model(root + 'model_dir/ffWtfWeightsUsing1s_v2_hybridTrue_minTagCutoff5_NoDrpOut_1HdnLyr_DoubleLen1stLyr_1800sPauseChops_ip-172-31-25-45_38178_epoch1.h5')
 
 
 printProductIds(getRecs(['OP-MKT10-PORIII-ET-K','OP-MKT12-PORIII-K','OP-MKT6510AT-HBG'], 100)) #covers

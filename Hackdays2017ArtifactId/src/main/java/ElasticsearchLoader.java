@@ -26,9 +26,9 @@ public class ElasticsearchLoader {
     public static String product = "product";
     public static String products = "products";
     public static String productId = "productId";
-    public static String imageUrl = "imageUrl";
-    public static String description = "description";
-    public static String title = "title";
+    public static String imageUrl = "productImageUrl";
+    public static String description = "productDescription";
+    public static String title = "productTitle";
     public static String titlesuggest = "titlesuggest";
     public static String vv_indicators = "vv_indicators";
   }
@@ -66,7 +66,7 @@ public class ElasticsearchLoader {
     try {
       System.out.println(deleteProductsIndex());
       System.out.println(createProductsIndex());
-//            System.exit(0);
+            System.exit(0);
 
       Map<String, String> m_prodId_prodTitle = DummyDataGenerator.getMap_prodId_prodTitle();
 

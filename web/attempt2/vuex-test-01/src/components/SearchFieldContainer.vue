@@ -17,7 +17,8 @@
         'loadproducts'
       ]),
       queryProductsMethod (query) {
-        this.$store.dispatch('loadproducts', query)
+        console.log('SUBMITTED queryProductsMethod query:' + query)
+        this.$store.dispatch('search_catalog', query)
       }
     }
   }

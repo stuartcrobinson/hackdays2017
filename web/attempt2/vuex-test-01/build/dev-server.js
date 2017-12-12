@@ -37,6 +37,71 @@ var app = express()
 //   next()
 // })
 
+/*
+apis to add:
+
+
+
+@app.route('/api/suggest')
+    q = request.args.get('q', type = str)
+
+@app.route('/api/search_catalog')
+    q = request.args.get('q', type = str)#.replace('"', '\\"')
+    n = request.args.get('n', default=15, type = int)
+
+@app.route('/api/recommendations/ff')
+    productIdsInput = request.args.get('productIds', default = 'default', type = str).split(",")
+    numProductsToRecommend = request.args.get('n', default = 1, type = int)
+    doReturnDetails = request.args.get('return_details', default = False, type = str)
+
+@app.route('/api/recommendations/bronto')
+    productIdsInput = request.args.get('productIds', default = 'default', type = str).split(",")
+    numProductsToRecommend = request.args.get('n', default = 1, type = int)
+    search_engine = request.args.get('search_engine', default = 'solr', type = str)
+    doReturnDetails = request.args.get('return_details', default = False, type = str)
+
+ */
+
+var dispay = (response) => {
+  console.log('response:')
+  console.log(response)
+  console.log('response.data:')
+  console.log(response.data)
+}
+
+// const server = 'http://localhost:5000'
+//
+// app.get('/api/suggest/:query', function (req, res, next) {
+//   console.log(`hit /api/suggest/${req.params.query}`)
+//
+//   axios.get(`${server}/pythonapi/suggest?q=${req.params.query}`)
+//     .then(response => {
+//       dispay(response)
+//       res.send(response.data)
+//     }).catch(error => res.send(error))
+// })
+//
+// app.get('/api/search_catalog/:query', function (req, res, next) {
+//   console.log(`/api/search_catalog/${req.params.query}`)
+//   axios.get(`${server}/pythonapi/search_catalog?q=${req.params.query}`)
+//     .then(response => {
+//       dispay(response)
+//       res.send(response.data)
+//     }).catch(error => res.send(error))
+// })
+//
+// app.get('/api/recommendations/ff/:query', function (req, res, next) {
+//   console.log(`/api/search_catalog/${req.params.query}`)
+//   axios.get(`${server}/pythonapi/search_catalog?q=${req.params.query}`)
+//     .then(response => {
+//       dispay(response)
+//       res.send(response.data)
+//     }).catch(error => res.send(error))
+// })
+
+/////////////////////////
+//old - deprecated
+
 //stuart added
 app.get('/api/queryproducts/:query', function (req, res, next) {
   console.log('app.get(\'/api/queryproducts/:query\', function (req, res, next) {.  query: ' + req.params.query)
@@ -51,6 +116,7 @@ app.get('/api/queryproducts/:query', function (req, res, next) {
     .catch(error => res.send(error))
 })
 
+// used - this is faster than going through python flask
 app.get('/api/queryproducttitletypeaheads/:query', function (req, res, next) {
 
   console.log('app.get(\'/api/queryproducttitletypeaheads/:query\', function (req, res, next) {.  query: ' + req.params.query)
