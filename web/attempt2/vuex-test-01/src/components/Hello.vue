@@ -25,12 +25,34 @@
         <br>
       </div>
     </div>
-
+    <!--https://codepen.io/paulobrien/pen/gWoVzN-->
     <search-field-container/>
 
     <br>
-    <div>
-      <table style="table-layout: fixed;">
+
+    <!--attempt with side-by-side divs-->
+    <div class="mycontainer">
+      <div class="leftdiv">
+        <card :imgUrl="$store.state.currentProduct.productImageUrl"
+              :productTitle="$store.state.currentProduct.productTitle"
+              productDescription='no description'
+              :productId="$store.state.currentProduct.productId"
+              :theclick="removeProduct"
+              hoverOverlay="❌"
+              :stupid_extra_variable_to_hold_product_cos_cant_make_anonymous_function_in_card_parameters_to_accept_product_object="$store.state.currentProduct">
+        </card>
+      </div>
+      <div class="rightdiv">
+        <card-list :products="$store.state.browsedProducts" :clickToRemove="true"/>
+      </div>
+    </div>
+
+    <!--attempt with table-->
+    <div style="
+    overflow-x: scroll;
+    overflow-y: hidden;
+    padding-bottom: 10px;">
+      <table>
         <tr>
           <th>Current Product</th>
           <th>Browse History</th>
@@ -46,7 +68,7 @@
                   :stupid_extra_variable_to_hold_product_cos_cant_make_anonymous_function_in_card_parameters_to_accept_product_object="$store.state.currentProduct">
             </card>
           </td>
-          <td style="border:1px solid black; padding:10px; display:block;">
+          <td style="border:1px solid black; padding:10px;">
             <card-list :products="$store.state.browsedProducts" :clickToRemove="true"/>
           </td>
         </tr>
@@ -157,5 +179,41 @@
   th {
     padding-left: 10px;
     padding-right: 10px;
+  }
+
+  .mycontainer {
+    text-align: left;
+    width: 100%;
+    /*display: inline;*/
+
+    /*position:relative*/
+    /*padding: 15px;*/
+  }
+
+  .leftdiv {
+    display: inline-block;
+    max-width: 300px;
+    text-align: left;
+    /*padding: 30px;*/
+    /*background-color: #ddd;*/
+    /*border-radius: 3px;*/
+    margin: 15px;
+    vertical-align: top;
+    position: relative;
+
+  }
+
+  .rightdiv {
+    display: inline;
+    position: absolute;
+    /*float: right;*/
+    left: 160px;
+    right: 0px;
+    /*max-width: 80%;*/
+    text-align: left;
+    /*padding: 30px;*/
+    /*background-color: #ddd;*/
+    /*border-radius: 3px;*/
+    margin: 15px;
   }
 </style>
