@@ -463,7 +463,7 @@ def getRecommendedProductFromSearchEngine(productIds, search_engine="solr"):
 #             qEquals += 'vv_indicators:"' + quote(id) + '"%20'
 # #         qEquals = quote(qEquals)
 #         qEquals += ""
-        url = 'http://52.90.195.143/:8983/solr/products/select?rows='+str(len(productIds)+5)+'&q=%2BproductImageUrl:*%20'+qEquals
+        url = 'http://52.90.195.143:8983/solr/products/select?rows='+str(len(productIds)+5)+'&q=%2BproductImageUrl:*%20'+qEquals
         print('url')
         print(url)
         r = requests.get(url).json()
