@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vue-datalist-autocomplete placeholder="Search" :onsubmit="queryProductsMethod" typeahead_endpoint_partial="/api/queryproducttitletypeaheads/"/>
+    <vue-datalist-autocomplete placeholder="search High Fashion Home catalog" :onsubmit="queryProductsMethod" typeahead_endpoint_partial="/api/queryproducttitletypeaheads/"/>
   </div>
 </template>
 
