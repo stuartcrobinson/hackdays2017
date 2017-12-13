@@ -39,10 +39,13 @@
 
 <style>
   .flex-container {
+    /*width: 100%;*/
     display: flex;
-    /*flex-direction: row;*/
-    flex-flow: row wrap;
+    /*flex-flow: row wrap;*/
     justify-content: left;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    padding-bottom: 10px;
   }
 
   .flex-item {

@@ -29,28 +29,29 @@
     <search-field-container/>
 
     <br>
-
-    <table>
-      <tr>
-        <th>Current Product</th>
-        <th>Browse History</th>
-      </tr>
-      <tr style="margin:30px">
-        <td style="border:4px solid blue; padding:10px;">
-          <card :imgUrl="$store.state.currentProduct.productImageUrl"
-                :productTitle="$store.state.currentProduct.productTitle"
-                productDescription='no description'
-                :productId="$store.state.currentProduct.productId"
-                :theclick="removeProduct"
-                hoverOverlay="❌"
-                :stupid_extra_variable_to_hold_product_cos_cant_make_anonymous_function_in_card_parameters_to_accept_product_object="$store.state.currentProduct">
-          </card>
-        </td>
-        <td style="border:1px solid black; padding:10px;" width="100%">
-          <card-list :products="$store.state.browsedProducts" :clickToRemove="true"/>
-        </td>
-      </tr>
-    </table>
+    <div>
+      <table style="table-layout: fixed;">
+        <tr>
+          <th>Current Product</th>
+          <th>Browse History</th>
+        </tr>
+        <tr>
+          <td style="border:4px solid blue; padding:10px;">
+            <card :imgUrl="$store.state.currentProduct.productImageUrl"
+                  :productTitle="$store.state.currentProduct.productTitle"
+                  productDescription='no description'
+                  :productId="$store.state.currentProduct.productId"
+                  :theclick="removeProduct"
+                  hoverOverlay="❌"
+                  :stupid_extra_variable_to_hold_product_cos_cant_make_anonymous_function_in_card_parameters_to_accept_product_object="$store.state.currentProduct">
+            </card>
+          </td>
+          <td style="border:1px solid black; padding:10px; display:block;">
+            <card-list :products="$store.state.browsedProducts" :clickToRemove="true"/>
+          </td>
+        </tr>
+      </table>
+    </div>
 
     <hr>
 
@@ -58,9 +59,9 @@
     is loading? {{ $store.state.isLoadingProductsSearch }}  -- num results: {{ $store.state.queriedProducts.length }}
     <card-list :products="$store.state.queriedProducts" :isLoading="$store.state.isLoadingProductsSearch"/>
     <!--<card :isHidden="!$store.state.isLoadingProductsSearch"-->
-          <!--imgUrl="https://i.allthepics.net/2017/08/06/fidgit-spinner-dragonb1f6d.gif"-->
-          <!--productTitle="Loading..."-->
-          <!--productId="...">-->
+    <!--imgUrl="https://i.allthepics.net/2017/08/06/fidgit-spinner-dragonb1f6d.gif"-->
+    <!--productTitle="Loading..."-->
+    <!--productId="...">-->
     <!--</card>-->
 
     <hr>
@@ -69,9 +70,9 @@
     <br/>
     <card-list :products="$store.state.brontoRecommendedProducts" :isLoading="$store.state.isLoadingBrontoRecommendedProducts"/>
     <!--<card :isHidden="!$store.state.isLoadingBrontoRecommendedProducts"-->
-          <!--imgUrl="https://i.allthepics.net/2017/08/06/fidgit-spinner-dragonb1f6d.gif"-->
-          <!--productTitle="Loading..."-->
-          <!--productId="...">-->
+    <!--imgUrl="https://i.allthepics.net/2017/08/06/fidgit-spinner-dragonb1f6d.gif"-->
+    <!--productTitle="Loading..."-->
+    <!--productId="...">-->
     <!--</card>-->
 
     <hr>
@@ -80,9 +81,9 @@
     <br/>
     <card-list :products="$store.state.stuartRecommendedProducts" :isLoading="$store.state.isLoadingStuartRecommendedProducts"/>
     <!--<card :isHidden="!$store.state.isLoadingStuartRecommendedProducts"-->
-          <!--imgUrl="https://i.allthepics.net/2017/08/06/fidgit-spinner-dragonb1f6d.gif"-->
-          <!--productTitle="Loading..."-->
-          <!--productId="...">-->
+    <!--imgUrl="https://i.allthepics.net/2017/08/06/fidgit-spinner-dragonb1f6d.gif"-->
+    <!--productTitle="Loading..."-->
+    <!--productId="...">-->
     <!--</card>-->
 
   </div>
