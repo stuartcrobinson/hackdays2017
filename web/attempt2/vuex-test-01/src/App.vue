@@ -1,7 +1,7 @@
 <template>
   <div id="app">
 
-    <div id="some example stuff" style="display: inherit">
+    <div id="some example stuff" style="display: none">
       <example1 nickname="sally">example1</example1>
       <!--<router-link :to="{ name: 'user', params: { userId: 123 }}">User</router-link>-->
       <router-link :to="{ name: 'Example11'}">Example11</router-link>

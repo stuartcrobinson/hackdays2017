@@ -1,6 +1,6 @@
 <template>
   <div class="container0">
-    <div id="example crap" style="display: inherit">
+    <div id="example crap" style="display: none">
       <div>
         Counter: {{ $store.state.count }} times, count is {{ evenOrOdd }}.
         <br>
@@ -42,14 +42,17 @@
     <br>
     length? {{ $store.state.queriedProducts.length }}
 
+    <hr>
     <strong>search results</strong><br/>
     <card-list :products="$store.state.queriedProducts"/>
 
+    <hr>
     <strong>bronto recs</strong>
     is loading? {{ $store.state.isLoadingBrontoRecommendedProducts }}
     <br/>
     <card-list :products="$store.state.brontoRecommendedProducts"/>
 
+    <hr>
     <strong>stuart recs</strong>
     is loading? {{ $store.state.isLoadingStuartRecommendedProducts }}
     <br/>
