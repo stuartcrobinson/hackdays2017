@@ -36,7 +36,7 @@
         <th><span style="font-size:40px">Browse History</span></th>
       </tr>
       <tr>
-        <td style="border:4px solid black; padding:10px">
+        <td style="border:4px solid blue; padding:10px">
           <!--<strong>current product</strong>-->
           <card :imgUrl="$store.state.currentProduct.productImageUrl"
                 :productTitle="$store.state.currentProduct.productTitle"
