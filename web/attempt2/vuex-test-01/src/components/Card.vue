@@ -6,8 +6,8 @@
 
     <br>
     <strong>{{ productTitle }}</strong>
-    <br>
-    {{ productId }}
+    <!--<br>-->
+    <!--{{ productId }}-->
 
   </div>
 
@@ -24,7 +24,11 @@
   .container {
     position: relative;
     text-align: center;
-    cursor: pointer
+    cursor: pointer;
+    /*height:200px;*/
+    min-width:150px;
+    max-height:180px;
+    /*max-height:200px;*/
   }
 
   /* Centered text */

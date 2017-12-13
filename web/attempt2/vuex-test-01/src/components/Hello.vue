@@ -31,8 +31,21 @@
     <br>
 
     <!--attempt with side-by-side divs-->
-    <div class="mycontainer">
+    <div class="mycontainer2">
+      <div class="leftdiv2">
+        <span class="title">Current Product</span>
+
+      </div>
+      <div class="rightdiv2">
+        <span class="title">Browse History</span>
+
+      </div>
+    </div>
+
+    <!--attempt with side-by-side divs-->
+    <div title="mycooltitle" class="mycontainer">
       <div class="leftdiv">
+        <!--<span class="title">Current Product</span>-->
         <card :imgUrl="$store.state.currentProduct.productImageUrl"
               :productTitle="$store.state.currentProduct.productTitle"
               productDescription='no description'
@@ -43,6 +56,8 @@
         </card>
       </div>
       <div class="rightdiv">
+        <!--<span class="title">Browse History</span>-->
+
         <card-list :products="$store.state.browsedProducts" :clickToRemove="true"/>
       </div>
     </div>
@@ -51,7 +66,7 @@
     <div style="
     overflow-x: scroll;
     overflow-y: hidden;
-    padding-bottom: 10px;">
+    padding-bottom: 10px;display:none;">
       <table>
         <tr>
           <th>Current Product</th>
@@ -78,7 +93,7 @@
     <hr>
 
     <span class="title">Search Results</span>
-    is loading? {{ $store.state.isLoadingProductsSearch }}  -- num results: {{ $store.state.queriedProducts.length }}
+    <!--is loading? {{ $store.state.isLoadingProductsSearch }}  &#45;&#45; num results: {{ $store.state.queriedProducts.length }}-->
     <card-list :products="$store.state.queriedProducts" :isLoading="$store.state.isLoadingProductsSearch"/>
     <!--<card :isHidden="!$store.state.isLoadingProductsSearch"-->
     <!--imgUrl="https://i.allthepics.net/2017/08/06/fidgit-spinner-dragonb1f6d.gif"-->
@@ -88,7 +103,7 @@
 
     <hr>
     <span class="title">Bronto Recs</span>
-    is loading? {{ $store.state.isLoadingBrontoRecommendedProducts }}
+    <!--is loading? {{ $store.state.isLoadingBrontoRecommendedProducts }}-->
     <br/>
     <card-list :products="$store.state.brontoRecommendedProducts" :isLoading="$store.state.isLoadingBrontoRecommendedProducts"/>
     <!--<card :isHidden="!$store.state.isLoadingBrontoRecommendedProducts"-->
@@ -99,7 +114,7 @@
 
     <hr>
     <span class="title">Neural Network Recs</span>
-    is loading? {{ $store.state.isLoadingStuartRecommendedProducts }}
+    <!--is loading? {{ $store.state.isLoadingStuartRecommendedProducts }}-->
     <br/>
     <card-list :products="$store.state.stuartRecommendedProducts" :isLoading="$store.state.isLoadingStuartRecommendedProducts"/>
     <!--<card :isHidden="!$store.state.isLoadingStuartRecommendedProducts"-->
@@ -183,7 +198,7 @@
 
   .mycontainer {
     text-align: left;
-    width: 100%;
+    width: 100vw;
     /*display: inline;*/
 
     /*position:relative*/
@@ -192,14 +207,20 @@
 
   .leftdiv {
     display: inline-block;
-    max-width: 300px;
+    width: 200px;
+    /*max-width: 300px;*/
     text-align: left;
+    /*bottom: 0;*/
     /*padding: 30px;*/
     /*background-color: #ddd;*/
     /*border-radius: 3px;*/
-    margin: 15px;
-    vertical-align: top;
+    /*margin: 15px;*/
+    /*vertical-align: top;*/
+    padding-top: 15px;
+
     position: relative;
+    min-height:200px;
+    border: 4px solid blue;
 
   }
 
@@ -207,13 +228,70 @@
     display: inline;
     position: absolute;
     /*float: right;*/
-    left: 160px;
-    right: 0px;
+    left: 225px;
+    right: 10px;
+
+    /*bottom: 0;*/
+    vertical-align: middle;
+    /*top: 50%;*/
+
     /*max-width: 80%;*/
     text-align: left;
     /*padding: 30px;*/
     /*background-color: #ddd;*/
     /*border-radius: 3px;*/
-    margin: 15px;
+    padding-top: 15px;
+    padding-left: 1px;
+    min-height:180px;
+    border: 1px solid black;
+
+  }
+
+
+  .mycontainer2 {
+    text-align: left;
+    width: 100%;
+    /*display: inline;*/
+
+    position:relative
+    /*padding: 15px;*/
+  }
+
+  .leftdiv2 {
+    display: inline-block;
+    width: 200px;
+    /*max-width: 300px;*/
+    text-align: center;
+    bottom: 0;
+    /*padding: 30px;*/
+    /*background-color: #ddd;*/
+    /*border-radius: 3px;*/
+    /*margin: 15px;*/
+    vertical-align: top;
+    position: relative;
+    padding-left:6px;
+
+  }
+
+  .rightdiv2 {
+
+    display: inline;
+    position: absolute;
+    /*float: right;*/
+    left: 205px;
+    right: 10px;
+    top: 30%;
+    /*right:50%;*/
+    /*top: 40px;*/
+    /*bottom: 0;*/
+    vertical-align: middle;
+    /*top: 50%;*/
+
+    /*max-width: 80%;*/
+    text-align: center;
+    /*padding: 30px;*/
+    /*background-color: #ddd;*/
+    /*border-radius: 3px;*/
+    /*margin: 15px;*/
   }
 </style>
