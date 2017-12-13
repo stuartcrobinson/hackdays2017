@@ -1,13 +1,20 @@
 <template>
   <div class="flex-container">
     <br>
+    <div class="flex-item" :style="isLoading ? '': 'display: none;'">
+      <card imgUrl="https://i.allthepics.net/2017/08/06/fidgit-spinner-dragonb1f6d.gif"
+            productTitle="Loading..."
+            productId="...">
+      </card>
+    </div>
     <div class="flex-item" v-for="product in products">
       <card
         :imgUrl="product.productImageUrl"
         :productTitle="product.productTitle"
         productDescription='no description'
         :productId="product.productId"
-        :theclick="browse"
+        :theclick="clickToRemove ? removeProduct : browse"
+        :hoverOverlay="clickToRemove ? '❌' : ''"
         :stupid_extra_variable_to_hold_product_cos_cant_make_anonymous_function_in_card_parameters_to_accept_product_object="product">
       </card>
     </div>
@@ -20,10 +27,11 @@
 
   export default {
     components: {Card},
-    props: ['products'],
+    props: ['products', 'isLoading', 'clickToRemove'],
     methods: {
       ...mapActions([
-        'browse'
+        'browse',
+        'removeProduct'
       ])
     }
   }
@@ -32,12 +40,14 @@
 <style>
   .flex-container {
     display: flex;
+    /*flex-direction: row;*/
     flex-flow: row wrap;
-    justify-content: space-around;
+    justify-content: left;
   }
+
   .flex-item {
-    padding-left:5px;
-    padding-right:5px;
+    padding-left: 5px;
+    padding-right: 5px;
   }
 </style>
 

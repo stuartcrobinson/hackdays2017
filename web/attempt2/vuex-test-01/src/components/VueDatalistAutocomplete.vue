@@ -4,6 +4,7 @@
           @submit.prevent="mysubmit"> <!--@submit.prevent="onsubmit">-->
       <label :for="input_id">{{ label }}</label>
       <input
+        style="font-size:25pt;color:darkslategray;width:500px;"
         type="text"
         :name="inputvmodel"
         v-model="inputvmodel"

@@ -7,12 +7,12 @@ Vue.use(Vuex)
 // const server = 'http://localhost:5000'
 const server = 'http://52.90.195.143:5000'
 
-const dodisplay = (response) => {
-  console.log('response:')
-  console.log(response)
-  console.log('response.data:')
-  console.log(response.data)
-}
+// const dodisplay = (response) => {
+//   console.log('response:')
+//   console.log(response)
+//   console.log('response.data:')
+//   console.log(response.data)
+// }
 
 const state = {
   count: 0,
@@ -66,9 +66,38 @@ const mutations = {
     state.stuartRecommendedProducts = products
   },
   prependProductToBrowsedProducts (state, newProduct) {
-    state.browsedProducts = [newProduct, ...state.browsedProducts]
+    console.log('prepending!')
+    if (newProduct['productId'] === undefined) {
+      console.log('productId undefined in newProduct')
+      return
+    }
+    if (newProduct['productId'] === null) {
+      console.log('productId null in newProduct')
+      return
+    }
+    if (newProduct['productId'].length === 0) {
+      console.log('productId length === 0 in newProduct')
+      return
+    }
+    if (state.browsedProducts.length === 0) {
+      state.browsedProducts = [newProduct]
+    } else {
+      state.browsedProducts = [newProduct, ...state.browsedProducts]
+    }
     console.log('browsed:')
     console.log(state.browsedProducts)
+  },
+  removeProductFromBrowsedProducts (state, product) {
+    console.log('removing!')
+    if (state.browsedProducts.length > 0) {
+      state.browsedProducts = state.browsedProducts.filter(p => p['productId'] !== product['productId'])
+    }
+    console.log('browsed:')
+    console.log(state.browsedProducts)
+
+    if (state.currentProduct.productId === product.productId) {
+      state.currentProduct = {}
+    }
   },
   setCurrentProduct (state, product) {
     state.currentProduct = product
@@ -116,7 +145,7 @@ const actions = {
       axios.get(`${server}/pythonapi/search_catalog?n=8&q=${query}`) // `http://robinson.brontolabs.local:9115/products/_search?q=${query}`
         .then(function (res) {
           context.commit('setIsLoadingProductsSearch', false)
-          dodisplay(res)
+          // dodisplay(res)
           context.commit('setQueriedProducts', res.data)
         })
         .catch(function (err) {
@@ -132,7 +161,7 @@ const actions = {
       axios.get(`/api/search_catalog/${query}/${8}`) // `http://robinson.brontolabs.local:9115/products/_search?q=${query}`
         .then(function (res) {
           context.commit('setIsLoadingProductsSearch', false)
-          dodisplay(res)
+          // dodisplay(res)
           context.commit('setQueriedProducts', res.data)
         })
         .catch(function (err) {
@@ -148,6 +177,11 @@ const actions = {
     }
     console.log(x)
     return x
+  },
+  removeProduct (context, product) {
+    context.commit('removeProductFromBrowsedProducts', product)
+    context.dispatch('getBrontoRecommendedProducts')
+    context.dispatch('getStuartRecommendedProducts')
   },
   browse (context, product) {
     // 1.  prepend currentProduct to browsedProducts
@@ -191,14 +225,26 @@ const actions = {
   //
   // TODO get these from browsed products list.  where/how to execute? fron context.state i believe
   getBrontoRecommendedProducts ({commit, state}) {
-    commit('setIsLoadingBrontoRecommendedProducts', true)
-    commit('setBrontoRecommendedProducts', {})
+    commit('setBrontoRecommendedProducts', [])
 
     console.log('state.currentProduct')
     console.log(state.currentProduct)
     console.log(state.currentProduct.productId)
     console.log(state.currentProduct['productId'])
-    const inputProducts = [state.currentProduct, ...state.browsedProducts]
+
+    var inputProducts
+
+    if (state.currentProduct.productId === undefined) {
+      if (state.browsedProducts.length === 0) {
+        return
+      } else {
+        inputProducts = state.browsedProducts
+      }
+    } else {
+      inputProducts = [state.currentProduct, ...state.browsedProducts]
+    }
+    commit('setIsLoadingBrontoRecommendedProducts', true)
+
     console.log('inputProducts')
     console.log(inputProducts)
     // const inputProductIds = inputProducts.map(a => a.productId)
@@ -236,7 +282,7 @@ const actions = {
         .then(function (res) {
           commit('setIsLoadingBrontoRecommendedProducts', false)
           console.log('getBrontoRecommendedProducts')
-          dodisplay(res)
+          // dodisplay(res)
           commit('setBrontoRecommendedProducts', res.data)
         })
         .catch(function (err) {
@@ -245,19 +291,25 @@ const actions = {
     })
   },
   getStuartRecommendedProducts ({commit, state}) {
-    commit('setIsLoadingStuartRecommendedProducts', true)
-    commit('setStuartRecommendedProducts', {})
+    commit('setStuartRecommendedProducts', [])
 
     console.log('state.currentProduct')
     console.log(state.currentProduct)
     console.log(state.currentProduct.productId)
     console.log(state.currentProduct['productId'])
-    const inputProducts = [state.currentProduct, ...state.browsedProducts]
-    console.log('inputProducts')
-    console.log(inputProducts)
-    // const inputProductIds = inputProducts.map(a => a.productId)
-    // console.log('inputProductIds')
-    // console.log(inputProductIds)
+
+    var inputProducts
+
+    if (state.currentProduct.productId === undefined) {
+      if (state.browsedProducts.length === 0) {
+        return
+      } else {
+        inputProducts = state.browsedProducts
+      }
+    } else {
+      inputProducts = [state.currentProduct, ...state.browsedProducts]
+    }
+    commit('setIsLoadingStuartRecommendedProducts', true)
 
     var productsStr = ''
 
@@ -290,7 +342,7 @@ const actions = {
         .then(function (res) {
           commit('setIsLoadingStuartRecommendedProducts', false)
           console.log('getStuartRecommendedProducts')
-          dodisplay(res)
+          // dodisplay(res)
           commit('setStuartRecommendedProducts', res.data)
         })
         .catch(function (err) {
