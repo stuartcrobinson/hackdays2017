@@ -43,14 +43,14 @@ def printProductIds(list):
 
 if siteId=='38178':
 #     weights = root + 'weights/ffWtfWeightsUsing1s_v2_hybridFalse_minTagCutoff0_NoDrpOut_1HdnLyr_DoubleLen1stLyr_1800sPauseChops_ip-172-31-25-45_38178_epoch2'
-    weights = root + 'weights/ffWtfWeightsUsing1s_v2_hybridFalse_minTagCutoff0_NoDrpOut_1HdnLyr_DoubleLen1stLyr_1800sPauseChops_ip-172-31-25-45_38178_epoch2'
+    weights = root + 'weights/ffWtfWeightsUsing1s_v2_hybridFalse_minTagCutoff0_usingParents_False_NoDrpOut_1HdnLyr_DoubleLen1stLyr_1800sPauseChops_ip-172-31-25-45_38178_epoch2'
 if siteId=='35569':
     weights = root + 'weights/ffWtfWeightsUsing1s_NoDrpOut_1HdnLyr_DoubleLen1stLyr_1800sPauseChops_USDR00253_35569_epoch2'
 
-map_customerId_productIdDateTuplesList = numpy.load(root + 'dataMedium/map_customerId_productIdDateTuplesList_True_'+siteId+'.npy').item()
+map_customerId_productIdDateTuplesList = numpy.load(root + 'dataMedium/map_customerId_productIdDateTuplesList_usingParents_False_'+siteId+'.npy').item()
 # map_customerId_productIdDateTuplesList = numpy.load('~/ml/dataMedium/map_newCustomerId_productIdDateTuplesList_'+siteId+'.npy').item()
 
-map_productId_index = numpy.load(root + 'dataMedium/map_productId_index_usingParents_True_'+siteId+'.npy').item()
+map_productId_index = numpy.load(root + 'dataMedium/map_productId_index_usingParents_False_'+siteId+'.npy').item()
 map_index_productId = dict((v,k) for (k,v) in map_productId_index.items())
 map_productId_imgUrl = numpy.load(root + 'dataMedium/map_productId_imgUrl_'+siteId+'.npy').item()
 
@@ -58,6 +58,18 @@ map_productId_title = numpy.load(root + 'dataMedium/map_productId_title_'+siteId
 
 map_productId_parentProductId = numpy.load(root + 'dataMedium/map_productId_parentProductId_'+siteId+'.npy').item()
 map_parentProductId_productId = dict((parentProductId, productId) for productId, parentProductId in map_productId_parentProductId.items())
+
+
+'''
+need these files:
+~/ml/dataMedium/map_customerId_productIdDateTuplesList_usingParents_Fals*
+~/ml/dataMedium/map_productId_index_usingParents_Fals*
+~/ml/dataMedium/map_productId_imgUrl*
+~/ml/dataMedium/map_productId_title_*
+~/ml/dataMedium/map_productId_parentProductId_*
+'''
+
+
 
 idsToAddParentUrlsFor = []
 

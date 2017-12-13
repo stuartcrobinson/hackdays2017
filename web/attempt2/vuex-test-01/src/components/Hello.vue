@@ -1,58 +1,60 @@
 <template>
   <div class="container0">
-    <div>
-      Counter: {{ $store.state.count }} times, count is {{ evenOrOdd }}.
-      <br>
-      Answer: {{ $store.state.isyes }}
-      <br>
-      gifurl: {{ $store.state.gifurl }}
-      <br>
-      <img :src="$store.state.gifurl"/>
+    <div id="example crap" style="display: none">
+      <div>
+        Counter: {{ $store.state.count }} times, count is {{ evenOrOdd }}.
+        <br>
+        Answer: {{ $store.state.isyes }}
+        <br>
+        gifurl: {{ $store.state.gifurl }}
+        <br>
+        <img :src="$store.state.gifurl"/>
 
+      </div>
+      <div class="container">
+        <br class="row text-center">
+        Clicked: {{ $store.state.count }} times, count is {{ evenOrOdd }}
+        <button class="btn btn-success" @click="increment">+</button>
+        <button class="btn btn-danger" @click="decrement">-</button>
+        <button class="btn" @click="incrementIfOdd">Increment if odd</button>
+        <button class="btn" @click="incrementAsync">Increment async</button>
+        <button class="btn" @click="yesnoaction">yesnoaction</button>
+        <button class="btn" @click="debouncedMethod">debouncedMethod</button>
+        <button class="btn" @click="throttledMethod">throttledMethod</button>
+        <button class="btn" @click="otherMethod">otherMethod</button>
+        <br>
+      </div>
     </div>
-    <div class="container">
-      <br class="row text-center">
-      Clicked: {{ $store.state.count }} times, count is {{ evenOrOdd }}
-      <button class="btn btn-success" @click="increment">+</button>
-      <button class="btn btn-danger" @click="decrement">-</button>
-      <button class="btn" @click="incrementIfOdd">Increment if odd</button>
-      <button class="btn" @click="incrementAsync">Increment async</button>
-      <button class="btn" @click="yesnoaction">yesnoaction</button>
-      <button class="btn" @click="debouncedMethod">debouncedMethod</button>
-      <button class="btn" @click="throttledMethod">throttledMethod</button>
-      <button class="btn" @click="otherMethod">otherMethod</button>
-      <br>
-      <strong>browse history</strong><br/>
-      <card-list :products="$store.state.browsedProducts"/>
+    <strong>browse history</strong><br/>
+    <card-list :products="$store.state.browsedProducts"/>
 
-      <strong>current product</strong>
-      <card :imgUrl="$store.state.currentProduct.productImageUrl"
-            :productTitle="$store.state.currentProduct.productTitle"
-            productDescription='no description'
-            :productId="$store.state.currentProduct.productId"
-            :theclick="browse"
-            :stupid_extra_variable_to_hold_product_cos_cant_make_anonymous_function_in_card_parameters_to_accept_product_object="$store.state.currentProduct">
-      </card>
-      <br>
-      <search-field-container/>
-      is loading? {{ $store.state.isLoadingProductsSearch }}
-      <br>
-      length? {{ $store.state.queriedProducts.length }}
+    <strong>current product</strong>
+    <card :imgUrl="$store.state.currentProduct.productImageUrl"
+          :productTitle="$store.state.currentProduct.productTitle"
+          productDescription='no description'
+          :productId="$store.state.currentProduct.productId"
+          :theclick="browse"
+          :stupid_extra_variable_to_hold_product_cos_cant_make_anonymous_function_in_card_parameters_to_accept_product_object="$store.state.currentProduct">
+    </card>
+    <br>
+    <search-field-container/>
+    is loading? {{ $store.state.isLoadingProductsSearch }}
+    <br>
+    length? {{ $store.state.queriedProducts.length }}
 
-      <strong>search results</strong><br/>
-      <card-list :products="$store.state.queriedProducts"/>
+    <strong>search results</strong><br/>
+    <card-list :products="$store.state.queriedProducts"/>
 
-      <strong>bronto recs</strong>
-      is loading? {{ $store.state.isLoadingBrontoRecommendedProducts }}
-      <br/>
-      <card-list :products="$store.state.brontoRecommendedProducts"/>
+    <strong>bronto recs</strong>
+    is loading? {{ $store.state.isLoadingBrontoRecommendedProducts }}
+    <br/>
+    <card-list :products="$store.state.brontoRecommendedProducts"/>
 
-      <strong>stuart recs</strong>
-      is loading? {{ $store.state.isLoadingStuartRecommendedProducts }}
-      <br/>
-      <card-list :products="$store.state.stuartRecommendedProducts"/>
+    <strong>stuart recs</strong>
+    is loading? {{ $store.state.isLoadingStuartRecommendedProducts }}
+    <br/>
+    <card-list :products="$store.state.stuartRecommendedProducts"/>
 
-    </div>
   </div>
 </template>
 
