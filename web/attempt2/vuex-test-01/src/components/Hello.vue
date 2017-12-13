@@ -28,6 +28,7 @@
     <strong>browse history</strong><br/>
     <card-list :products="$store.state.browsedProducts"/>
 
+    <hr>
     <strong>current product</strong>
     <card :imgUrl="$store.state.currentProduct.productImageUrl"
           :productTitle="$store.state.currentProduct.productTitle"
