@@ -35,6 +35,10 @@
     flex-flow: row wrap;
     justify-content: space-around;
   }
+  .flex-item {
+    padding-left:5px;
+    padding-right:5px;
+  }
 </style>
 
 <!--methods: {-->

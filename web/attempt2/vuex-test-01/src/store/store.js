@@ -65,8 +65,10 @@ const mutations = {
   setStuartRecommendedProducts (state, products) {
     state.stuartRecommendedProducts = products
   },
-  preProductToBrowsedProducts (state, newProduct) {
+  prependProductToBrowsedProducts (state, newProduct) {
     state.browsedProducts = [newProduct, ...state.browsedProducts]
+    console.log('browsed:')
+    console.log(state.browsedProducts)
   },
   setCurrentProduct (state, product) {
     state.currentProduct = product
@@ -158,7 +160,7 @@ const actions = {
     //     currentProduct, brontoRecommendedProducts, and stuartRecommendedProducts, browsedProducts, and queriedProducts
 
     console.log(product)
-    context.commit('preProductToBrowsedProducts', context.state.currentProduct)
+    context.commit('prependProductToBrowsedProducts', context.state.currentProduct)
     context.commit('setCurrentProduct', product)
     context.dispatch('getBrontoRecommendedProducts')
     context.dispatch('getStuartRecommendedProducts')

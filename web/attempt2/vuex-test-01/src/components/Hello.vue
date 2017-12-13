@@ -32,8 +32,8 @@
 
     <table>
       <tr>
-        <th><span style="font-size:40px">Current Product</span></th>
-        <th><span style="font-size:40px">Browse History</span></th>
+        <th>Current Product</th>
+        <th>Browse History</th>
       </tr>
       <tr>
         <td style="border:4px solid blue; padding:10px">
@@ -55,18 +55,18 @@
 
     <hr>
 
-    <strong><span style="font-size:40px">Search Results</span></strong>
+    <span class="title">Search Results</span>
     is loading? {{ $store.state.isLoadingProductsSearch }}  -- num results: {{ $store.state.queriedProducts.length }}
     <card-list :products="$store.state.queriedProducts"/>
 
     <hr>
-    <strong><span style="font-size:40px">Bronto Recs</span></strong>
+    <span class="title">Bronto Recs</span>
     is loading? {{ $store.state.isLoadingBrontoRecommendedProducts }}
     <br/>
     <card-list :products="$store.state.brontoRecommendedProducts"/>
 
     <hr>
-    <strong><span style="font-size:40px">Neural Network Recs</span></strong>
+    <span class="title">Neural Network Recs</span>
     is loading? {{ $store.state.isLoadingStuartRecommendedProducts }}
     <br/>
     <card-list :products="$store.state.stuartRecommendedProducts"/>
@@ -145,4 +145,16 @@
     }
   }
 </script>
-
+<style>
+  hr {
+    border-top: 1px solid #8c8b8b;
+  }
+  th, span.title {
+    font-size:35px;
+    font-weight:bold;
+  }
+  th {
+    padding-left:10px;
+    padding-right:10px;
+  }
+</style>
