@@ -25,36 +25,48 @@
         <br>
       </div>
     </div>
-    <strong>browse history</strong><br/>
-    <card-list :products="$store.state.browsedProducts"/>
 
-    <hr>
-    <strong>current product</strong>
-    <card :imgUrl="$store.state.currentProduct.productImageUrl"
-          :productTitle="$store.state.currentProduct.productTitle"
-          productDescription='no description'
-          :productId="$store.state.currentProduct.productId"
-          :theclick="browse"
-          :stupid_extra_variable_to_hold_product_cos_cant_make_anonymous_function_in_card_parameters_to_accept_product_object="$store.state.currentProduct">
-    </card>
-    <br>
     <search-field-container/>
-    is loading? {{ $store.state.isLoadingProductsSearch }}
+
     <br>
-    length? {{ $store.state.queriedProducts.length }}
+
+    <table>
+      <tr>
+        <th><span style="font-size:40px">Current Product</span></th>
+        <th><span style="font-size:40px">Browse History</span></th>
+      </tr>
+      <tr>
+        <td style="border:4px solid black; padding:10px">
+          <!--<strong>current product</strong>-->
+          <card :imgUrl="$store.state.currentProduct.productImageUrl"
+                :productTitle="$store.state.currentProduct.productTitle"
+                productDescription='no description'
+                :productId="$store.state.currentProduct.productId"
+                :theclick="browse"
+                :stupid_extra_variable_to_hold_product_cos_cant_make_anonymous_function_in_card_parameters_to_accept_product_object="$store.state.currentProduct">
+          </card>
+        </td>
+        <td style="border:1px solid black; padding:10px">
+          <!--<strong>browse history</strong><br/>-->
+          <card-list :products="$store.state.browsedProducts"/>
+        </td>
+      </tr>
+    </table>
 
     <hr>
-    <strong>search results</strong><br/>
+
+    <strong><span style="font-size:40px">Search Results</span></strong>
+    is loading? {{ $store.state.isLoadingProductsSearch }}  -- num results: {{ $store.state.queriedProducts.length }}
     <card-list :products="$store.state.queriedProducts"/>
 
     <hr>
-    <strong>bronto recs</strong>
+    <strong><span style="font-size:40px">Bronto Recs</span></strong>
     is loading? {{ $store.state.isLoadingBrontoRecommendedProducts }}
     <br/>
     <card-list :products="$store.state.brontoRecommendedProducts"/>
 
     <hr>
-    <strong>stuart recs</strong>
+    <strong><span style="font-size:40px">Neural Network Recs</span></strong>
     is loading? {{ $store.state.isLoadingStuartRecommendedProducts }}
     <br/>
     <card-list :products="$store.state.stuartRecommendedProducts"/>
