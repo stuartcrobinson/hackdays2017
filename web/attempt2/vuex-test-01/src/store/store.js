@@ -4,7 +4,8 @@ import axios from 'axios'
 
 Vue.use(Vuex)
 
-const server = 'http://localhost:5000'
+// const server = 'http://localhost:5000'
+const server = 'http://52.90.195.143:5000'
 
 const dodisplay = (response) => {
   console.log('response:')
@@ -111,6 +112,22 @@ const actions = {
     context.commit('setQueriedProducts', {})
     return new Promise((resolve, reject) => {
       axios.get(`${server}/pythonapi/search_catalog?n=8&q=${query}`) // `http://robinson.brontolabs.local:9115/products/_search?q=${query}`
+        .then(function (res) {
+          context.commit('setIsLoadingProductsSearch', false)
+          dodisplay(res)
+          context.commit('setQueriedProducts', res.data)
+        })
+        .catch(function (err) {
+          console.log(err)
+        })
+    })
+  },
+  search_catalogExpress (context, query) {
+    console.log('search_catalog')
+    context.commit('setIsLoadingProductsSearch', true)
+    context.commit('setQueriedProducts', {})
+    return new Promise((resolve, reject) => {
+      axios.get(`/api/search_catalog/${query}/${8}`) // `http://robinson.brontolabs.local:9115/products/_search?q=${query}`
         .then(function (res) {
           context.commit('setIsLoadingProductsSearch', false)
           dodisplay(res)

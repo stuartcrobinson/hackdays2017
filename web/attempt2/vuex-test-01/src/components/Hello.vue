@@ -1,6 +1,6 @@
 <template>
   <div class="container0">
-    <div id="example crap" style="display: none">
+    <div id="example crap" style="display: inherit">
       <div>
         Counter: {{ $store.state.count }} times, count is {{ evenOrOdd }}.
         <br>
