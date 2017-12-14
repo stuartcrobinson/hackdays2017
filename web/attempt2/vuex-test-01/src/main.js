@@ -11,6 +11,8 @@ import store from './store/store'
 
 Vue.config.productionTip = false
 
+document.title = 'Hackdays2017'
+
 // Vue.component('example1', Example1)
 
 /* eslint-disable no-new */

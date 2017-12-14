@@ -151,11 +151,11 @@ usingParents = False
 
 map_customerId_productIdDateTuplesList_original = defaultdict(list)
 
-# try:
-#     map_customerId_productIdDateTuplesList_original = numpy.load(root + 'dataMedium/map_customerId_productIdDateTuplesList_original_'+siteId+'.npy').item()
-#     print("read map_customerId_productIdDateTuplesList_original from file")
-# except IOError:
-if True:
+try:
+    map_customerId_productIdDateTuplesList_original = numpy.load(root + 'dataMedium/map_customerId_productIdDateTuplesList_original_'+siteId+'.npy').item()
+    print("read map_customerId_productIdDateTuplesList_original from file")
+except IOError:
+# if True:
     # path = os.path.expanduser("~/ml/fordocker/browse_production_siteId_=35569/part-r-00016-55b1cd2d-d2c7-43dc-ac2a-da953f82d47b.csv")
     path = os.path.expanduser(root + "fordocker/browse_production_siteId_="+siteId+"/*.csv")
     nonascii = bytearray(range(0x80, 0x100))
@@ -347,12 +347,14 @@ import socket
 
 # X_sparse_csr = sparse.csr_matrix(X)
 # y_sparse_csr = sparse.csr_matrix(y)
+# 
+# 
+# from keras.models import Sequential
+# from keras.layers import Dense
 
 def baseline_model():
     model = Sequential()
-#     model.add(Dropout(0.5, input_shape=(len(map_productId_index),)))
     model.add(Dense(2*numInputNodes, input_dim=numInputNodes, activation='relu'))
-#     model.add(Dropout(0.5))
     model.add(Dense(len(map_productId_index), activation='softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
     return model

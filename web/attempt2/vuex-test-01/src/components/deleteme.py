@@ -8,11 +8,11 @@ def asdf():
 
   model = Sequential()
 
-  model.add(Dense(2 * numInputNodes,
-                  input_dim=numInputNodes,
+  model.add(Dense(2 * numProducts,
+                  input_dim=numProducts,
                   activation='relu'))
 
-  model.add(Dense(len(map_productId_index),
+  model.add(Dense(numProducts,
                   activation='softmax'))
 
   model.compile(loss='categorical_crossentropy',
@@ -23,6 +23,6 @@ def asdf():
 
 
 
-
+model.fit(X, y, epochs=3, batch_size=2000)
 
 

@@ -158,7 +158,7 @@ const actions = {
     context.commit('setIsLoadingProductsSearch', true)
     context.commit('setQueriedProducts', {})
     return new Promise((resolve, reject) => {
-      axios.get(`/api/search_catalog/${query}/${8}`) // `http://robinson.brontolabs.local:9115/products/_search?q=${query}`
+      axios.get(`/api/search_catalog/${query}/${20}`) // `http://robinson.brontolabs.local:9115/products/_search?q=${query}`
         .then(function (res) {
           context.commit('setIsLoadingProductsSearch', false)
           // dodisplay(res)
