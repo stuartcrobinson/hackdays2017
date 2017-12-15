@@ -43,7 +43,7 @@
     </div>
 
     <!--attempt with side-by-side divs-->
-    <div title="mycooltitle" class="mycontainer">
+    <div class="mycontainer">
       <div class="leftdiv">
         <!--<span class="title">Current Product</span>-->
         <card :imgUrl="$store.state.currentProduct.productImageUrl"

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :title="productId">
     <div class="container" :style="productTitle == undefined? 'display: none;' : ''" @click="theclick(stupid_extra_variable_to_hold_product_cos_cant_make_anonymous_function_in_card_parameters_to_accept_product_object)">
       <img height="130" :src="imgUrl" :alt="productId"/>
       <div class="centered" id="redx"><p>{{ hoverOverlay }}</p></div>
