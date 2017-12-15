@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container" :style="productTitle == undefined? 'display: none;' : ''" @click="theclick(stupid_extra_variable_to_hold_product_cos_cant_make_anonymous_function_in_card_parameters_to_accept_product_object)">
-      <img height="140" :src="imgUrl" :alt="productId"/>
+      <img height="130" :src="imgUrl" :alt="productId"/>
       <div class="centered" id="redx"><p>{{ hoverOverlay }}</p></div>
 
       <br>
@@ -28,8 +28,8 @@
     text-align: center;
     cursor: pointer;
     /*height:200px;*/
-    min-width: 150px;
-    max-height: 180px;
+    min-width: 140px;
+    max-height: 170px;
     /*max-height:200px;*/
   }
 

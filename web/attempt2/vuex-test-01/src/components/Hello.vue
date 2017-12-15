@@ -94,7 +94,7 @@
 
     <span class="title">Search Results</span>
     <!--is loading? {{ $store.state.isLoadingProductsSearch }}  &#45;&#45; num results: {{ $store.state.queriedProducts.length }}-->
-    <card-list :products="$store.state.queriedProducts" :isLoading="$store.state.isLoadingProductsSearch"/>
+    <card-list :products="$store.state.queriedProducts" :isLoading="$store.state.isLoadingProductsSearch.length > 0"/>
     <!--<card :isHidden="!$store.state.isLoadingProductsSearch"-->
     <!--imgUrl="https://i.allthepics.net/2017/08/06/fidgit-spinner-dragonb1f6d.gif"-->
     <!--productTitle="Loading..."-->
@@ -105,7 +105,7 @@
     <span class="title">Bronto Recs</span>
     <!--is loading? {{ $store.state.isLoadingBrontoRecommendedProducts }}-->
     <br/>
-    <card-list :products="$store.state.brontoRecommendedProducts" :isLoading="$store.state.isLoadingBrontoRecommendedProducts"/>
+    <card-list :products="$store.state.brontoRecommendedProducts" :isLoading="$store.state.isLoadingBrontoRecommendedProducts.length > 0"/>
     <!--<card :isHidden="!$store.state.isLoadingBrontoRecommendedProducts"-->
     <!--imgUrl="https://i.allthepics.net/2017/08/06/fidgit-spinner-dragonb1f6d.gif"-->
     <!--productTitle="Loading..."-->
@@ -116,7 +116,7 @@
     <span class="title">Neural Network Recs</span>
     <!--is loading? {{ $store.state.isLoadingStuartRecommendedProducts }}-->
     <br/>
-    <card-list :products="$store.state.stuartRecommendedProducts" :isLoading="$store.state.isLoadingStuartRecommendedProducts"/>
+    <card-list :products="$store.state.stuartRecommendedProducts" :isLoading="$store.state.isLoadingStuartRecommendedProducts.length > 0"/>
     <!--<card :isHidden="!$store.state.isLoadingStuartRecommendedProducts"-->
     <!--imgUrl="https://i.allthepics.net/2017/08/06/fidgit-spinner-dragonb1f6d.gif"-->
     <!--productTitle="Loading..."-->
@@ -187,7 +187,7 @@
   }
 
   th, span.title {
-    font-size: 35px;
+    font-size: 30px;
     font-weight: bold;
   }
 
@@ -207,7 +207,7 @@
 
   .leftdiv {
     display: inline-block;
-    width: 200px;
+    width: 190px;
     /*max-width: 300px;*/
     text-align: left;
     /*bottom: 0;*/
@@ -228,7 +228,7 @@
     display: inline;
     position: absolute;
     /*float: right;*/
-    left: 225px;
+    left: 215px;
     right: 10px;
 
     /*bottom: 0;*/
@@ -259,7 +259,7 @@
 
   .leftdiv2 {
     display: inline-block;
-    width: 200px;
+    width: 190px;
     /*max-width: 300px;*/
     text-align: center;
     bottom: 0;
@@ -270,6 +270,7 @@
     vertical-align: top;
     position: relative;
     padding-left:6px;
+    margin-top:-20px;
 
   }
 

@@ -19,9 +19,9 @@ const state = {
   name: 'stuart',
   gifurl: '',
   isyes: false,
-  isLoadingProductsSearch: false,
-  isLoadingBrontoRecommendedProducts: false,
-  isLoadingStuartRecommendedProducts: false,
+  isLoadingProductsSearch: [],
+  isLoadingBrontoRecommendedProducts: [],
+  isLoadingStuartRecommendedProducts: [],
   queriedProducts: [],
   browsedProducts: [],
   currentProduct: {},
@@ -48,13 +48,27 @@ const mutations = {
     state.isyes = isyes
   },
   setIsLoadingProductsSearch (state, booleanvalue) {
-    state.isLoadingProductsSearch = booleanvalue
+    // state.isLoadingProductsSearch = booleanvalue
+    if (booleanvalue) {
+      state.isLoadingProductsSearch.push(true)
+    } else {
+      state.isLoadingProductsSearch.pop()
+    }
   },
   setIsLoadingBrontoRecommendedProducts (state, booleanvalue) {
-    state.isLoadingBrontoRecommendedProducts = booleanvalue
+    if (booleanvalue) {
+      state.isLoadingBrontoRecommendedProducts.push(true)
+    } else {
+      state.isLoadingBrontoRecommendedProducts.pop()
+    }
   },
   setIsLoadingStuartRecommendedProducts (state, booleanvalue) {
-    state.isLoadingStuartRecommendedProducts = booleanvalue
+    // state.isLoadingStuartRecommendedProducts = booleanvalue
+    if (booleanvalue) {
+      state.isLoadingStuartRecommendedProducts.push(true)
+    } else {
+      state.isLoadingStuartRecommendedProducts.pop()
+    }
   },
   setQueriedProducts (state, queriedProducts) {
     state.queriedProducts = queriedProducts
@@ -98,6 +112,8 @@ const mutations = {
     if (state.currentProduct.productId === product.productId) {
       state.currentProduct = {}
     }
+    // state.brontoRecommendedProducts = [] // doens't help
+    // state.stuartRecommendedProducts = []
   },
   setCurrentProduct (state, product) {
     state.currentProduct = product
