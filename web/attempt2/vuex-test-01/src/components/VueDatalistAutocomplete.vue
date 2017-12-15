@@ -15,7 +15,9 @@
         :disabled="disabled"
         :autofocus="autofocus"
         @input="inputinputevent"
-      />
+      /><span style="float:right">
+        <a href="http://slides.com/stuartcrobinson/deck#/">hackdays presentation slides</a>
+      </span>
       <datalist :id="datalist_id">
         <option v-for="item in typeaheads">{{ item }}</option>
       </datalist>

@@ -102,7 +102,7 @@
     <!--</card>-->
 
     <hr>
-    <span class="title">Bronto Recs</span>
+    <span class="title">Bronto Recs</span> &nbsp;&nbsp; (estimated by search Bronto's "viewed this / viewed that" indicator lists in Solr)
     <!--is loading? {{ $store.state.isLoadingBrontoRecommendedProducts }}-->
     <br/>
     <card-list :products="$store.state.brontoRecommendedProducts" :isLoading="$store.state.isLoadingBrontoRecommendedProducts.length > 0"/>
