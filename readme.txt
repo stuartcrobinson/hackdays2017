@@ -20,3 +20,10 @@ command to restart vue:
 in hackdays2017/web/attempt2/vuex-test-01
 
 nohup npm run dev >/dev/null 2>&1 &
+
+
+to start elasticsearch (used for typeahead)
+
+sudo -u bronto sh /usr/local/bronto/commerce-es/bin/elasticsearch -d
+
+i think python3 app.py to run python backend
